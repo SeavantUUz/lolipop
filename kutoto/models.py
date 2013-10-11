@@ -1,18 +1,24 @@
+# coding:utf-8
+
 from datetime import datetime
 from kutoto import db
 from werkzeug import generate_password_hash,check_password_hash
 
 class User(db.Model):
     '''User account'''
+    __tablename = "users"
     id = db.Column(db.Integer,primary_key = True)
     email = db.Column(db.String(120),unique=True)
     username = db.Column(db.String(80),unique=True)
     _password = db.Column('password',db.String(80),nullable=False)
     posts = db.relationship("Post",backref="user",lazy="dynamic")
     topics = db.relationship("Topic",backref="user",lazy="dynamic")
-
+    score = db.Column(db.Integer,default = 0)
+    
+    # synonym method replace a column by another name
     # descriptor is a parameter in sqlalchemy
     # property is python build-in method
+
     password = db.synonym('_password',descriptor = property(_get_password,_set_password))
 
     def __repr__(self):
@@ -29,10 +35,10 @@ class User(db.Model):
             return False
         return check_password_hash(self.password,password)
 
-    def get_all_post(self):
+    def get_all_posts(self):
         return Post.query.filter(Post.user_id == self.id)
 
-    def get_all_topic(self):
+    def get_all_topics(self):
         return Topic.query.filter(Topic.user_id == self.id)
 
 class Post(db.Model):
@@ -43,8 +49,9 @@ class Post(db.Model):
     # if set up ondelete properity when parent row change,
     # the children row will change too
     id = db.Column(db.Integer,primary_key = True)
+    # foreignkey's first parameter is the table's column name
     topic_id = db.Column(db.Integer,db.ForeignKey("topics.id",use_alter = True,name="fk_topic_id",ondelete="CASCADE"))
-    user_id =  db.Column(db.Integer,db.ForeignKey("uses,id"))
+    user_id =  db.Column(db.Integer,db.ForeignKey("uses.id"))
     content = db.Column(db.Text)
     date_created = db.Column(db.DateTime,default=datetime.utcnow())
     dete_modified = db.Column(db.DateTime)
@@ -67,6 +74,7 @@ class Post(db.Model):
 
             topic.last_post_id = self.id
             
+            user.score += 1
             topic.post_count += 1
             
             db.session.add(topic)
@@ -81,6 +89,11 @@ class Post(db.Model):
                 self.topic.last_post_id = self.topic.second_last_post_id
                 db.session.commit()
 
+            # Here's self.user and self.topic
+            # is the backref which define in
+            # User class and Topic class
+            
+            self.user.score -= 1
             self.topic.post_count -= 1
             
             db.session.delete(self)
@@ -129,5 +142,7 @@ class Topic(db.Model):
         return self
 
     def delete(self):
+        count = Post.query.filter(topic_id == self.id).filter(user_id == self.user_id).count()
+        self.user.score -= count
         db.session.delete(self)
         db.session.commit()
