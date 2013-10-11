@@ -1,4 +1,4 @@
-Kutoto_flask
+kutoto_flask
 ============
 
 A forum written by flask
