@@ -1,0 +1,14 @@
+<form class = "form" method="POST">
+    {{ form.csrf_token }}
+    <h3>新的话题</h3>
+    <div class="form-subject">
+        <label>标题</label>
+        {{ form.subject(size=99) }}
+    </div>
+    <br />
+    <div class="form-content">
+        <label>内容</label> 
+        {{ form.content(rows='14',cols='76')}}
+    </div>
+    <input type="submit" value="提交">
+</form>
