@@ -1,8 +1,9 @@
 # coding:utf-8
 
 from datetime import datetime
-from kutoto import db
+#from run import db
 from werkzeug import generate_password_hash,check_password_hash
+from database import db
 
 ##class User(db.Model):
 ##    '''User account'''
@@ -131,7 +132,7 @@ class Topic(db.Model):
         return self.posts[-2].id
 
     #def save(self,user=None,post=None):
-    def save(self,post=None)
+    def save(self,post=None):
         # edit title
         if self.id:
             db.session.add(self)

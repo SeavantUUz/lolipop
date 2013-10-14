@@ -16,15 +16,3 @@ class ReplyPost(Form):
     def save(self,topic):
         post = Post(content = self.content.data)
         return post.save(topic = topic)
-
-class EditPost(ReplyPost):
-    def __init__(self,post):
-        self.post = post
-    self.post.content = content
-
-    def save(self):
-        return self.post.save()
-        
-    
-
-
