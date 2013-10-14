@@ -21,12 +21,13 @@ def new_topic():
     form  = NewTopic()
     if form.validate_on_submit():
         form.save()
-        return redirect('/success')
+        return redirect('/index')
     return render_template('form.html',form=form)
 
-@app.route('/success')
-def success():
-    return 'Success'
+@app.route("/topic/<int:topic_id>")
+def show_topic(topic_id):
+    posts = Post.query.filter_by(topic_id=topic_id).order_by(Post.date_created)
+    return render_template('posts.html',posts=posts)
 
 @manager.command
 def init():
