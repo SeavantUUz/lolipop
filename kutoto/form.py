@@ -2,6 +2,7 @@
 from flask_wtf import Form
 from wtforms import TextField,TextAreaField
 from wtforms.validators import DataRequired
+from kutoto.models import Post,Topic
 
 class NewTopic(Form):
     subject = TextField(u'标题',validators=[DataRequired(message=u'标题')])

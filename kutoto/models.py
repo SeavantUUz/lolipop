@@ -3,7 +3,7 @@
 from datetime import datetime
 #from run import db
 from werkzeug import generate_password_hash,check_password_hash
-from database import db
+from config import db
 
 ##class User(db.Model):
 ##    '''User account'''
@@ -109,7 +109,7 @@ class Topic(db.Model):
     id = db.Column(db.Integer,primary_key = True)
     title = db.Column(db.String)
     #user_id = db.Column(db.Integer,db.ForeignKey("user.id"))
-    date_created = db.Column(db.DateTime,datetime.utcnow())
+    date_created = db.Column(db.DateTime,default=datetime.utcnow())
     viewed = db.Column(db.Integer,default = 0)
     post_count = db.Column(db.Integer,default = 0)
 
@@ -127,7 +127,7 @@ class Topic(db.Model):
         if title:
             self.title = title
 
-    @properity
+    @property
     def second_last_post_id(self):
         return self.posts[-2].id
 
@@ -141,7 +141,7 @@ class Topic(db.Model):
         db.session.add(self)
         db.session.commit()
 
-        post.save(user,self)
+        post.save(self)
         self.first_post_id = post.id
         db.session.commit()
         return self
