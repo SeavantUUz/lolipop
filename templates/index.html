@@ -2,7 +2,9 @@
 <h5>Kochiya Sanae</h5>
 <ul>
     {% for topic in topics %}
-    <li>{{ topic.title }}</li>
+    <li><a href="/topic/{{ topic.id }}">{{ topic.title }}</a></li>
     {% endfor %}
 </ul>
+<br />
+<a href="/new_topic">新的话题</a>
 </html>
