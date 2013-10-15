@@ -1,7 +1,7 @@
 <html>
 <ul>
     {% for post in posts %}
-    <li>{{ post.content }}</li>
+    <li>{{ post.content }} <a href="/delete/post/{{ post.id }}">删除</a></li>
     {% endfor %}
 </ul>
 <br />

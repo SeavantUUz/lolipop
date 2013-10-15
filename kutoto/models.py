@@ -85,13 +85,13 @@ class Post(db.Model):
             db.session.commit()
             return self
 
-        def delete(self):
-            if self.topic.first_post_id == self.id:
-                self.topic.delete()
-                return self
-            if self.topic.last_post_id == self.id:
-                self.topic.last_post_id = self.topic.second_last_post_id
-                db.session.commit()
+    def delete(self):
+        if self.topic.first_post_id == self.id:
+            self.topic.delete()
+            return False
+        if self.topic.last_post_id == self.id:
+            self.topic.last_post_id = self.topic.second_last_post_id
+            db.session.commit()
 
             # Here's self.user and self.topic
             # is the backref which define in
@@ -102,7 +102,7 @@ class Post(db.Model):
             
             db.session.delete(self)
             db.session.commit()
-            return self
+            return True
 
 class Topic(db.Model):
     __tablename__ = 'topics'

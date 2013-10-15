@@ -2,7 +2,7 @@
 <h5>Kochiya Sanae</h5>
 <ul>
     {% for topic in topics %}
-    <li><a href="/topic/{{ topic.id }}">{{ topic.title }}</a></li>
+    <li><a href="/topic/{{ topic.id }}">{{ topic.title }}</a> <a href="/delete/topic/{{ topic.id }}">删除</a></li>
     {% endfor %}
 </ul>
 <br />
