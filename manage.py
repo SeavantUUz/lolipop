@@ -65,7 +65,6 @@ def edit_post(post_id):
         form.content.data = post.content
     return render_template('edit_post.html',form=form)
 
-
 @manager.command
 def init():
     dfile = 'database.db'
