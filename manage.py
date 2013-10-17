@@ -1,15 +1,19 @@
 import os
 from flask.ext.script import Manager,Server
-from config import db
+from config import db,login_manager
 from app import create_app
 from kutoto.form import NewTopic,ReplyPost,EditPost
-from kutoto.models import Post,Topic
+from kutoto.models import Post,Topic,User
 from flask import redirect,render_template,url_for
 
 app = create_app()
+login_manager.init_app(app)
 manager = Manager(app)
 manager.add_command("runserver",Server("localhost",port=8000))
 
+@login_manager.user_loader
+def load_user(userid):
+    return User.get(userid)
 
 @app.route("/")
 @app.route("/index")

@@ -5,43 +5,43 @@ from datetime import datetime
 from werkzeug import generate_password_hash,check_password_hash
 from config import db
 
-##class User(db.Model):
-##    '''User account'''
-##    __tablename = "users"
-##    id = db.Column(db.Integer,primary_key = True)
-##    email = db.Column(db.String(120),unique=True)
-##    username = db.Column(db.String(80),unique=True)
-##    _password = db.Column('password',db.String(80),nullable=False)
-##    posts = db.relationship("Post",backref="user",lazy="dynamic")
-##    topics = db.relationship("Topic",backref="user",lazy="dynamic")
-##    score = db.Column(db.Integer,default = 0)
-##    
-##    # synonym method replace a column by another name
-##    # descriptor is a parameter in sqlalchemy
-##    # property is python build-in method
-##
-##    password = db.synonym('_password',descriptor = property(_get_password,_set_password))
-##
-##    def __repr__(self):
-##        return "Username:%s" % self.username
-##
-##    def _set_password(self,password):
-##        self._password = generate_password_hash(password)
-##
-##    def _get_password(self):
-##        return self._password
-##
-##    def check_password(self,password):
-##        if self.password is None:
-##            return False
-##        return check_password_hash(self.password,password)
-##
-##    def get_all_posts(self):
-##        return Post.query.filter(Post.user_id == self.id)
-##
-##    def get_all_topics(self):
-##        return Topic.query.filter(Topic.user_id == self.id)
-##
+class User(db.Model):
+    '''User account'''
+    __tablename = "users"
+    id = db.Column(db.Integer,primary_key = True)
+    email = db.Column(db.String(120),unique=True)
+    username = db.Column(db.String(80),unique=True)
+    _password = db.Column('password',db.String(80),nullable=False)
+    posts = db.relationship("Post",backref="user",lazy="dynamic")
+    topics = db.relationship("Topic",backref="user",lazy="dynamic")
+    score = db.Column(db.Integer,default = 0)
+    
+    # synonym method replace a column by another name
+    # descriptor is a parameter in sqlalchemy
+    # property is python build-in method
+    def _set_password(self,password):
+        self._password = generate_password_hash(password)
+
+    def _get_password(self):
+        return self._password
+
+
+    password = db.synonym('_password',descriptor = property(_get_password,_set_password))
+
+    def __repr__(self):
+        return "Username:%s" % self.username
+
+    def check_password(self,password):
+        if self.password is None:
+            return False
+        return check_password_hash(self.password,password)
+
+    def get_all_posts(self):
+        return Post.query.filter(Post.user_id == self.id)
+
+    def get_all_topics(self):
+        return Topic.query.filter(Topic.user_id == self.id)
+
 class Post(db.Model):
     __tablename__="posts"
 
