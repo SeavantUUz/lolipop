@@ -53,7 +53,7 @@ def delete_post(post_id):
 
 @app.route('/edit/post/<int:post_id>',methods=('GET','POST'))
 def edit_post(post_id):
-    form = ReplyPost()
+    form = EditPost()
     post = Post.query.get(post_id)
     topic_id = post.topic_id
     if form.validate_on_submit():
