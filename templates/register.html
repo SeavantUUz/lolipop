@@ -1,0 +1,14 @@
+<html>
+<form class="register_form" role="form" method="POST">
+    <div>
+    {{ form.hidden_tag() }}
+    <h2>注册</h2>
+    <hr>
+    <p>{{ form.username(size=99) }}</p>
+    <p>{{ form.email(size=99) }}</p>
+    <p>{{ form.password(size=99) }}</p>
+    <p>{{ form.confirm_password(size=99) }}</p>
+</div>
+<input type="submit" value="提交">
+</form>
+</html>

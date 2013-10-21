@@ -1,0 +1,12 @@
+<html>
+<form class="login_form" role="form" method="POST">
+    <div>
+    {{ form.hidden_tag() }}
+    <h2>登录</h2>
+    <hr>
+    <p>{{ form.username(size=99) }}</p>
+    <p>{{ form.password(size=99) }}</p>
+    </div>
+    <input type = "submit" value="提交">
+</form>
+</html>
