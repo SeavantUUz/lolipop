@@ -65,6 +65,7 @@ def sanae():
     return "Kochiya Sanae"
 
 @app.route("/new_topic",methods=('GET','POST'))
+@login_required
 def new_topic():
     form  = NewTopic()
     if form.validate_on_submit():
@@ -77,13 +78,17 @@ def show_topic(topic_id):
     form = ReplyPost()
     posts = Post.query.filter_by(topic_id=topic_id).order_by(Post.date_created)
     topic = Topic.query.get(topic_id)
-    if form.validate_on_submit():
+    if current_user is not None and current_user.is_authenticated() and form.validate_on_submit():
         form.save(topic)
         return redirect(url_for('show_topic',topic_id=topic_id))
         #return redirect('/index')
+    elif form.validate_on_submit():
+        return redirect(url_for('login'))
+
     return render_template('posts.html',posts=posts,form=form)
 
 @app.route('/delete/topic/<int:topic_id>')
+@login_required
 def delete_topic(topic_id):
     topic = Topic.query.get(topic_id)
     topic.delete()
