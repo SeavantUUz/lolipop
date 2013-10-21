@@ -4,14 +4,16 @@ from datetime import datetime
 #from run import db
 from werkzeug import generate_password_hash,check_password_hash
 from config import db
+from flask.ext.login import UserMixin
 
-class User(db.Model):
+class User(db.Model,UserMixin):
     '''User account'''
-    __tablename = "users"
+    __tablename__ = "users"
     id = db.Column(db.Integer,primary_key = True)
     email = db.Column(db.String(120),unique=True)
     username = db.Column(db.String(80),unique=True)
     _password = db.Column('password',db.String(80),nullable=False)
+    date_joined = db.Column(db.DateTime,default=datetime.utcnow())
     posts = db.relationship("Post",backref="user",lazy="dynamic")
     topics = db.relationship("Topic",backref="user",lazy="dynamic")
     score = db.Column(db.Integer,default = 0)
@@ -42,6 +44,20 @@ class User(db.Model):
     def get_all_topics(self):
         return Topic.query.filter(Topic.user_id == self.id)
 
+    @classmethod
+    def authenticate(cls,login,password):
+        user = cls.query.filter(db.or_(User.username == login,User.email == login)).first()
+        if user:
+            authenticated = user.check_password(password)
+        else:
+            authenticated = False
+        return user,authenticated
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+        return self
+
 class Post(db.Model):
     __tablename__="posts"
 
@@ -52,7 +68,7 @@ class Post(db.Model):
     id = db.Column(db.Integer,primary_key = True)
     # foreignkey's first parameter is the table's column name
     topic_id = db.Column(db.Integer,db.ForeignKey("topics.id",use_alter = True,name="fk_topic_id",ondelete="CASCADE"))
-##    user_id =  db.Column(db.Integer,db.ForeignKey("uses.id"))
+    user_id =  db.Column(db.Integer,db.ForeignKey("users.id"))
     content = db.Column(db.Text)
     date_created = db.Column(db.DateTime,default=datetime.utcnow())
     dete_modified = db.Column(db.DateTime)
@@ -108,7 +124,7 @@ class Topic(db.Model):
     __tablename__ = 'topics'
     id = db.Column(db.Integer,primary_key = True)
     title = db.Column(db.String)
-    #user_id = db.Column(db.Integer,db.ForeignKey("user.id"))
+    user_id = db.Column(db.Integer,db.ForeignKey("users.id"))
     date_created = db.Column(db.DateTime,default=datetime.utcnow())
     viewed = db.Column(db.Integer,default = 0)
     post_count = db.Column(db.Integer,default = 0)

@@ -1,10 +1,11 @@
 import os
 from flask.ext.script import Manager,Server
+from flask.ext.login import current_user,login_user,login_required,logout_user
 from config import db,login_manager
 from app import create_app
-from kutoto.form import NewTopic,ReplyPost,EditPost
+from kutoto.form import NewTopic,ReplyPost,EditPost,RegisterUser,LoginUser
 from kutoto.models import Post,Topic,User
-from flask import redirect,render_template,url_for
+from flask import redirect,render_template,url_for,request,flash
 
 app = create_app()
 login_manager.init_app(app)
@@ -13,13 +14,55 @@ manager.add_command("runserver",Server("localhost",port=8000))
 
 @login_manager.user_loader
 def load_user(userid):
-    return User.get(userid)
+    return User.query.get(userid)
 
 @app.route("/")
 @app.route("/index")
 def index():
     topics = Topic.query.order_by(Topic.last_post_id.desc())
     return render_template('index.html',topics=topics)
+
+@app.route('/profile/<int:user_id>')
+def profile(user_id):
+    return "This is profile"
+
+@app.route('/login',methods=["GET","POST"])
+def login():
+    if current_user is not None and current_user.is_authenticated():
+        return redirect(url_for('profile',user_id=current_user.id))
+    form = LoginUser()
+    if form.validate_on_submit():
+        user,authenticated = User.authenticate(form.username.data,form.password.data)
+        if user and authenticated:
+            login_user(user,remember = form.remember_me.data)
+            return redirect(request.args.get("next") or url_for('index'))
+    return render_template("login.html",form=form)
+
+@app.route('/register',methods=["GET","POST"])
+def register():
+    if current_user is not None and current_user.is_authenticated():
+        return redirect(url_for('profile',user_id = current_user.id))
+
+    form = RegisterUser(request.form)
+    if form.validate_on_submit():
+        user = form.save()
+        login_user(user)
+
+        flash(("Thanks for your registering"),"success")
+        return redirect(url_for('index'))
+    return render_template('register.html',form=form)
+
+@app.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    flash(("Logged out"),"success")
+    return redirect(url_for('index'))
+
+@app.route('/sanae')
+@login_required
+def sanae():
+    return "Kochiya Sanae"
 
 @app.route("/new_topic",methods=('GET','POST'))
 def new_topic():
