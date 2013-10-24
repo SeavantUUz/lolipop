@@ -4,10 +4,10 @@
     {{ form.hidden_tag() }}
     <h2>注册</h2>
     <hr>
-    <p>{{ form.username(size=99) }}</p>
-    <p>{{ form.email(size=99) }}</p>
-    <p>{{ form.password(size=99) }}</p>
-    <p>{{ form.confirm_password(size=99) }}</p>
+    <p>用户名:  {{ form.username(size=99) }}</p>
+    <p>电子邮箱:{{ form.email(size=99) }}</p>
+    <p>密码:    {{ form.password(size=99) }}</p>
+    <p>重复密码:{{ form.confirm_password(size=99) }}</p>
 </div>
 <input type="submit" value="提交">
 </form>

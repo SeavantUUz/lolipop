@@ -8,16 +8,16 @@ from datetime import datetime
 class NewTopic(Form):
     subject = TextField(u'标题',validators=[DataRequired(message=u'标题')])
     content = TextAreaField(u'内容',validators=[DataRequired(u'内容')])
-    def save(self):
+    def save(self,user):
         topic = Topic(title = self.subject.data)
         post = Post(content = self.content.data)
-        return topic.save(post = post)
+        return topic.save(user = user,post = post)
 
 class ReplyPost(Form):
     content = TextAreaField(u'内容',validators=[DataRequired(u'内容')])
-    def save(self,topic):
+    def save(self,user,topic):
         post = Post(content = self.content.data)
-        return post.save(topic = topic)
+        return post.save(user = user,topic = topic)
 
 class EditPost(Form):
     content = TextAreaField(u'内容',validators=[DataRequired(u'内容')])

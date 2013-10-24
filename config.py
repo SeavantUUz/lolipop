@@ -3,3 +3,4 @@ from flask.ext.login import LoginManager
 
 db = SQLAlchemy()
 login_manager = LoginManager()
+

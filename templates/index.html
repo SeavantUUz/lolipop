@@ -2,7 +2,7 @@
 <h5>Kochiya Sanae</h5> <a href="/register">注册</a> <a href="/login">登录</a> <a href="/logout">登出</a>
 <ul>
     {% for topic in topics %}
-    <li><a href="/topic/{{ topic.id }}">{{ topic.title }}</a> <a href="/delete/topic/{{ topic.id }}">删除</a></li>
+    <li><a href="/topic/{{ topic.id }}">{{ topic.title }}</a> <h6>---by <a href="/profile/{{topic.user.id}}">{{topic.user}}</a></h6> <h6>---create at {{topic.date_created}}</h6> <a href="/delete/topic/{{ topic.id }}">删除</a></li>
     {% endfor %}
 </ul>
 <br />

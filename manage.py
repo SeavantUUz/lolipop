@@ -5,12 +5,24 @@ from config import db,login_manager
 from app import create_app
 from kutoto.form import NewTopic,ReplyPost,EditPost,RegisterUser,LoginUser
 from kutoto.models import Post,Topic,User
-from flask import redirect,render_template,url_for,request,flash
+from flask import redirect,render_template,url_for,request,flash,abort
+from functools import wraps
 
 app = create_app()
 login_manager.init_app(app)
 manager = Manager(app)
 manager.add_command("runserver",Server("localhost",port=8000))
+
+def admin_required(func):
+    @wraps(func)
+    def decorated_view(*args,**kwargs):
+        try:
+            if not current_user.id == 1:
+                abort(403)
+            return func(*args,**kwargs)
+        except AttributeError:
+            abort(403)
+    return decorated_view
 
 @login_manager.user_loader
 def load_user(userid):
@@ -69,7 +81,7 @@ def sanae():
 def new_topic():
     form  = NewTopic()
     if form.validate_on_submit():
-        form.save()
+        form.save(current_user)
         return redirect('/index')
     return render_template('form.html',form=form)
 
@@ -79,7 +91,7 @@ def show_topic(topic_id):
     posts = Post.query.filter_by(topic_id=topic_id).order_by(Post.date_created)
     topic = Topic.query.get(topic_id)
     if current_user is not None and current_user.is_authenticated() and form.validate_on_submit():
-        form.save(topic)
+        form.save(current_user,topic)
         return redirect(url_for('show_topic',topic_id=topic_id))
         #return redirect('/index')
     elif form.validate_on_submit():
@@ -98,8 +110,8 @@ def delete_topic(topic_id):
 def delete_post(post_id):
     post = Post.query.get(post_id)
     topic_id = post.topic_id
-    backWhere = post.delete()
-    if backWhere:
+    isNotBackToIndex = post.delete()
+    if isNotBackToIndex:
         return redirect(url_for('show_topic',topic_id=topic_id))
     else:return redirect('/index')
 
@@ -117,12 +129,21 @@ def edit_post(post_id):
         form.content.data = post.content
     return render_template('edit_post.html',form=form)
 
+@app.route('/admin')
+@admin_required
+def admin():
+    posts = Post.query.all()
+    topics = Topic.query.all()
+    users = User.query.all()
+    return render_template('admin.html',posts = posts,topics = topics,users = users)
+
 @manager.command
 def init():
     dfile = 'database.db'
     if os.path.exists(dfile):
         os.remove(dfile)
     db.create_all()
+
 
 if __name__ == "__main__":
     manager.run()

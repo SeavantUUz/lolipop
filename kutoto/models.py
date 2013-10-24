@@ -6,6 +6,31 @@ from werkzeug import generate_password_hash,check_password_hash
 from config import db
 from flask.ext.login import UserMixin
 
+##class Node(db.Model):
+##    __tablename__ = "nodes"
+##    id = db.Column(db.Integer,primary_key = True)
+##    title = db.Column(db.String(120),unique=True)
+##    description = db.Column(db.String)
+##    topics = db.relationship("Topic",backref="node",lazy="joined")
+##    
+##    @property
+##    def post_count(self):
+##        return Post.query.filter(Topic.node_id == self.id).filter(Post.topic_id == Topic.node_id).count()
+##
+##    @property
+##    def topic_count(self):
+##        return Topic.query.filter(Topic.node_id == self.id).count()
+##
+##    def save(self):
+##        db.session.add(self)
+##        db.session.commit()
+##        return self
+##
+##    def delete(self):
+##        db.session.delete(self)
+##        db.session.commit()
+##        return self
+##
 class User(db.Model,UserMixin):
     '''User account'''
     __tablename__ = "users"
@@ -31,7 +56,7 @@ class User(db.Model,UserMixin):
     password = db.synonym('_password',descriptor = property(_get_password,_set_password))
 
     def __repr__(self):
-        return "Username:%s" % self.username
+        return "%s" % self.username
 
     def check_password(self,password):
         if self.password is None:
@@ -73,8 +98,8 @@ class Post(db.Model):
     date_created = db.Column(db.DateTime,default=datetime.utcnow())
     dete_modified = db.Column(db.DateTime)
 
-    #def save(self,user=None,topic=None):
-    def save(self,topic=None):
+    def save(self,user=None,topic=None):
+        #def save(self,topic=None):
         # edit the post
 
         if self.id:
@@ -83,9 +108,9 @@ class Post(db.Model):
             return self
 
         # new post
-        #if user and topic:
-        if topic:
-            #self.user_id = user.id
+        if user and topic:
+        #if topic:
+            self.user_id = user.id
             self.topic_id = topic.id
             self.date_created = datetime.utcnow()
 
@@ -147,17 +172,17 @@ class Topic(db.Model):
     def second_last_post_id(self):
         return self.posts[-2].id
 
-    #def save(self,user=None,post=None):
-    def save(self,post=None):
+    def save(self,user=None,post=None):
+        #def save(self,post=None):
         # edit title
         if self.id:
             db.session.add(self)
             db.session.commit()
-        #self.user_id = user.id
+        self.user_id = user.id
         db.session.add(self)
         db.session.commit()
 
-        post.save(self)
+        post.save(user,self)
         self.first_post_id = post.id
         db.session.commit()
         return self
