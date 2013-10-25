@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+{% block main %}
+<ul>
+    {% for topic in topics %}
+    <li>
+    <a href="/node/{{ node.title }}/topic/{{ topic.id }}">{{topic.title}}</a> 
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}
