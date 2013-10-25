@@ -1,0 +1,12 @@
+<html>
+<form class="addNode_form" role="form" method="POST">
+    <div>
+        {{ form.hiddent_tag() }}
+        <h2>添加新的节点</h2>
+        <hr>
+        <p>标题: {{ form.title(size=99) }}</p>
+        <p>描述: {{ form.description(rows='14',cols='76') }}</p>
+    </div>
+    <input type="submit" value="回复">
+</form>
+</html>

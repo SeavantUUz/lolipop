@@ -1,0 +1,12 @@
+<html>
+<ul>
+    {% for topic in topics %}
+    <p>{{topic.title}} <a href='/delete/topic/{{ topic.id }}'>删除</a>
+    {% endfor %}
+</ul>
+<ul>
+    {% for user in users %}
+    <p>{{user.username}} <a href='/delete/user/{{ user.id }}'>block</a>
+    {% endfor %}
+</ul>
+</html>
