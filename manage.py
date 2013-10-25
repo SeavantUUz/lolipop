@@ -4,7 +4,7 @@ from flask.ext.login import current_user,login_user,login_required,logout_user
 from config import db,login_manager
 from app import create_app
 from kutoto.form import NewTopic,ReplyPost,EditPost,RegisterUser,LoginUser
-from kutoto.models import Post,Topic,User
+from kutoto.models import Post,Topic,User,Node
 from flask import redirect,render_template,url_for,request,flash,abort
 from functools import wraps
 
@@ -76,35 +76,30 @@ def logout():
 def sanae():
     return "Kochiya Sanae"
 
-@app.route("/new_topic",methods=('GET','POST'))
+@app.route("/node/<int:node_id>/new_topic",methods=('GET','POST'))
 @login_required
-def new_topic():
+def new_topic(node_id):
+    node = Node.query.get(node_id)
     form  = NewTopic()
     if form.validate_on_submit():
-        form.save(current_user)
+        form.save(node,current_user)
         return redirect('/index')
     return render_template('form.html',form=form)
 
-@app.route("/topic/<int:topic_id>",methods=('GET','POST'))
-def show_topic(topic_id):
+@app.route("/node/<int:node_id>/topic/<int:topic_id>",methods=('GET','POST'))
+def show_topic(node_id,topic_id):
+    node = Node.query.get(node_id)
     form = ReplyPost()
     posts = Post.query.filter_by(topic_id=topic_id).order_by(Post.date_created)
     topic = Topic.query.get(topic_id)
     if current_user is not None and current_user.is_authenticated() and form.validate_on_submit():
-        form.save(current_user,topic)
+        form.save(node,current_user,topic)
         return redirect(url_for('show_topic',topic_id=topic_id))
         #return redirect('/index')
     elif form.validate_on_submit():
         return redirect(url_for('login'))
 
     return render_template('posts.html',posts=posts,form=form)
-
-@app.route('/delete/topic/<int:topic_id>')
-@login_required
-def delete_topic(topic_id):
-    topic = Topic.query.get(topic_id)
-    topic.delete()
-    return redirect('/index')
 
 @app.route('/delete/post/<int:post_id>')
 def delete_post(post_id):
@@ -134,8 +129,22 @@ def edit_post(post_id):
 def admin():
     posts = Post.query.all()
     topics = Topic.query.all()
-    users = User.query.all()
+    users = User.query.filter(User.id != 1).all()
     return render_template('admin.html',posts = posts,topics = topics,users = users)
+
+@app.route('/delete/topic/<int:topic_id>')
+@admin_required
+def delete_topic(topic_id):
+    topic = Topic.query.get(topic_id)
+    topic.delete()
+    return redirect(url_for('admin'))
+
+@app.route('/delete/user/<int:user_id>')
+@admin_required
+def delelte_user(user_id):
+    user = User.query.get(user_id)
+    user.delete()
+    return redirect(url_for('admin'))
 
 @manager.command
 def init():

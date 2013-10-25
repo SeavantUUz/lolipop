@@ -6,31 +6,31 @@ from werkzeug import generate_password_hash,check_password_hash
 from config import db
 from flask.ext.login import UserMixin
 
-##class Node(db.Model):
-##    __tablename__ = "nodes"
-##    id = db.Column(db.Integer,primary_key = True)
-##    title = db.Column(db.String(120),unique=True)
-##    description = db.Column(db.String)
-##    topics = db.relationship("Topic",backref="node",lazy="joined")
-##    
-##    @property
-##    def post_count(self):
-##        return Post.query.filter(Topic.node_id == self.id).filter(Post.topic_id == Topic.node_id).count()
-##
-##    @property
-##    def topic_count(self):
-##        return Topic.query.filter(Topic.node_id == self.id).count()
-##
-##    def save(self):
-##        db.session.add(self)
-##        db.session.commit()
-##        return self
-##
-##    def delete(self):
-##        db.session.delete(self)
-##        db.session.commit()
-##        return self
-##
+class Node(db.Model):
+    __tablename__ = "nodes"
+    id = db.Column(db.Integer,primary_key = True)
+    title = db.Column(db.String(120),unique=True)
+    description = db.Column(db.String)
+    topics = db.relationship("Topic",backref="node",lazy="joined")
+    
+    @property
+    def post_count(self):
+        return Post.query.filter(Topic.node_id == self.id).filter(Post.topic_id == Topic.node_id).count()
+
+    @property
+    def topic_count(self):
+        return Topic.query.filter(Topic.node_id == self.id).count()
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+        return self
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+        return self
+
 class User(db.Model,UserMixin):
     '''User account'''
     __tablename__ = "users"
@@ -80,6 +80,11 @@ class User(db.Model,UserMixin):
 
     def save(self):
         db.session.add(self)
+        db.session.commit()
+        return self
+
+    def delete(self):
+        db.session.delete(self)
         db.session.commit()
         return self
 
@@ -149,6 +154,7 @@ class Topic(db.Model):
     __tablename__ = 'topics'
     id = db.Column(db.Integer,primary_key = True)
     title = db.Column(db.String)
+    node_id = db.Column(db.Integer,db.ForeignKey("nodes.id",use_alter=True,name="fk_node_id"))
     user_id = db.Column(db.Integer,db.ForeignKey("users.id"))
     date_created = db.Column(db.DateTime,default=datetime.utcnow())
     viewed = db.Column(db.Integer,default = 0)
@@ -172,12 +178,14 @@ class Topic(db.Model):
     def second_last_post_id(self):
         return self.posts[-2].id
 
-    def save(self,user=None,post=None):
+    def save(self,node=None,user=None,post=None):
         #def save(self,post=None):
         # edit title
         if self.id:
             db.session.add(self)
             db.session.commit()
+
+        self.node_id = node.id
         self.user_id = user.id
         db.session.add(self)
         db.session.commit()
