@@ -2,7 +2,7 @@
 from flask_wtf import Form
 from wtforms import TextField,TextAreaField,PasswordField,BooleanField
 from wtforms.validators import DataRequired,Required,EqualTo
-from kutoto.models import Post,Topic,User
+from kutoto.models import Post,Topic,User,Node
 from datetime import datetime
 
 class NewTopic(Form):
@@ -53,3 +53,13 @@ class LoginUser(Form):
     username = TextField(u"用户名",validators=[Required(message=u"填写用户名")])
     password = PasswordField(u'密码',validators = [Required(message=u"填写密码")])
     remember_me = BooleanField(u'记住我',default = False)
+
+class AddNodeForm(Form):
+    title = TextField(u'Node Name',validators = [Required(message=u'填写Node的名字')])
+    description = TextAreaField(u'Node 描述',validators = [Required(message=u'请填写描述')])
+    
+    def save(self):
+        node = Node(title=self.title.data,
+                description = self.description.data,
+                )
+        return node.save()
