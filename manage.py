@@ -38,7 +38,7 @@ def index():
 @app.route("/node/<node_title>")
 def listTopics(node_title):
     topics = Node.query.filter(Topic.node.title == node_title).order_by(Topic.last_post.desc())
-    return render_template('node.html',topics = topics)
+    return render_template('node.html',node_title=node_title,topics = topics)
     
 @app.route("/node/<node_title>/new_topic",methods=('GET','POST'))
 @login_required
@@ -50,7 +50,7 @@ def newTopic(node_title):
         return redirect(url_for('listTopics',node_title=node_title))
     return render_template('form.html',form=form)
 
-@app.route("/node/<node_title>/topic/<int,topic_id>",methods=('GET','POST'))
+@app.route("/node/<node_title>/topic/<int:topic_id>",methods=('GET','POST'))
 ## where we can see the different between filter and filter_by
 ## the filter allow use the pythonic way to filter data
 ## and filter_by use the column name to filter

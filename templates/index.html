@@ -1,10 +1,15 @@
-<html>
-<h5>Kochiya Sanae</h5> <a href="/register">注册</a> <a href="/login">登录</a> <a href="/logout">登出</a>
+{% extends "layout.html" %}
+
+{% block main %}
 <ul>
-    {% for topic in topics %}
-    <li><a href="/topic/{{ topic.id }}">{{ topic.title }}</a> <h6>---by <a href="/profile/{{topic.user.id}}">{{topic.user}}</a></h6> <h6>---create at {{topic.date_created}}</h6> <a href="/delete/topic/{{ topic.id }}">删除</a></li>
+    {% for node in nodes %}
+    <li>
+    <a href="/node/{{ node.title }}">{{ node.title }}</a>
+    <hr>
+    <p>{{ node.description }}</p>
+    </li>
     {% endfor %}
 </ul>
 <br />
-<a href="/new_topic">新的话题</a>
-</html>
+<a href="/node/{{ node.title }}/new_topic">新的话题</a>
+{% endblock %}
