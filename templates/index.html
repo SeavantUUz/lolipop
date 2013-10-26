@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 
-{% block main %}
+{% block content %}
 <ul>
     {% for node in nodes %}
     <li>
@@ -11,5 +11,4 @@
     {% endfor %}
 </ul>
 <br />
-<a href="/node/{{ node.title }}/new_topic">新的话题</a>
 {% endblock %}

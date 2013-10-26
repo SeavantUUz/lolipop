@@ -1,5 +1,6 @@
 <html>
 <ul>
+    <p><a href="/addNode">增加一个节点</a>
     {% for topic in topics %}
     <p>{{topic.title}} <a href='/delete/topic/{{ topic.id }}'>删除</a>
     {% endfor %}

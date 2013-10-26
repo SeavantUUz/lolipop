@@ -32,7 +32,7 @@ def load_user(userid):
 @app.route("/index")
 def index():
     #nodes = Nodes.query.order_by(Topic.last_post_id.desc())
-    nodes = Nodes.query.all()
+    nodes = Node.query.all()
     return render_template('index.html',nodes = nodes)
 
 @app.route("/node/<node_title>")
@@ -149,7 +149,7 @@ def delelteUser(user_id):
     user.delete()
     return redirect(url_for('admin'))
 
-@app.route('/addNode',method=('GET','POST'))
+@app.route('/addNode',methods=('GET','POST'))
 @admin_required
 def addNode():
     form = AddNodeForm()
