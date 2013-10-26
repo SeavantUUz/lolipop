@@ -15,9 +15,9 @@ class NewTopic(Form):
 
 class ReplyPost(Form):
     content = TextAreaField(u'内容',validators=[DataRequired(u'内容')])
-    def save(self,node,user,topic):
+    def save(self,user,topic):
         post = Post(content = self.content.data)
-        return post.save(node,user = user,topic = topic)
+        return post.save(user = user,topic = topic)
 
 class EditPost(Form):
     content = TextAreaField(u'内容',validators=[DataRequired(u'内容')])
