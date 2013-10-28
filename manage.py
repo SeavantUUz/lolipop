@@ -5,7 +5,7 @@ from config import db,login_manager
 from app import create_app
 from kutoto.form import NewTopic,ReplyPost,EditPost,RegisterUser,LoginUser,AddNodeForm
 from kutoto.models import Post,Topic,User,Node
-from flask import redirect,render_template,url_for,request,flash,abort
+from flask import redirect,render_template,url_for,request,flash,abort,current_app
 from functools import wraps
 
 app = create_app()
@@ -37,9 +37,14 @@ def index():
 
 @app.route("/node/<node_title>")
 def listTopics(node_title):
+    page = request.args.get('page',1,type=int)
+
     node = Node.query.filter(Node.title == node_title).first()
     topics = Topic.query.filter(Topic.node_id== node.id)
-    return render_template('nodes.html',node_title=node_title,topics = topics)
+    # here 7 is a magic number and it only for testing
+    topics_pages = topics.count()/7+1
+    topics = topics.paginate(page,7,True)
+    return render_template('nodes.html',node_title=node_title,topics = topics,topics_pages = topics_pages)
     
 @app.route("/node/<node_title>/new_topic",methods=('GET','POST'))
 @login_required
@@ -55,17 +60,28 @@ def newTopic(node_title):
 ## where we can see the different between filter and filter_by
 ## the filter allow use the pythonic way to filter data
 ## and filter_by use the column name to filter
-def listPosts(node_title,topic_id):
+def listPosts(node_title,topic_id,page=None):
+    # add pages
+    page = page or request.args.get('page',1,type=int)
     node = Node.query.filter_by(title = node_title).first()
     form = ReplyPost()
     posts = Post.query.filter_by(topic_id=topic_id).order_by(Post.date_created)
     topic = Topic.query.get(topic_id)
+
+    posts_count = posts.count()
+    posts_pages = (posts_count-1)/7+1
+    ## refresh the posts
+    posts = posts.paginate(page,7,False)
+
     if current_user is not None and current_user.is_authenticated() and form.validate_on_submit():
         form.save(current_user,topic)
-        return redirect(url_for('listPosts',node_title=node_title,topic_id=topic_id))
+        if not posts_count % 7:
+            page_count = page+1
+        else:page_count = page
+        return redirect(url_for('listPosts',node_title=node_title,topic_id=topic_id,page=page_count))
     elif form.validate_on_submit():
         return redirect(url_for('login'))
-    return render_template('posts.html',node=node,posts=posts,form=form)
+    return render_template('posts.html',topic = topic,node=node,posts=posts,form=form,posts_pages = posts_pages,page=page)
 
 @app.route('/register',methods=["GET","POST"])
 def register():

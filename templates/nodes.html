@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
 <ul>
-    {% for topic in topics %}
+    {% for topic in topics.items %}
     <li>
     <a href="/node/{{ node_title }}/topic/{{ topic.id }}">{{topic.title}}</a> 
     </li>
