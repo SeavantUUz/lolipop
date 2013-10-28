@@ -7,5 +7,13 @@
     </li>
     {% endfor %}
 </ul>
+<tr>
+    {% for index in range(topics_pages) %}
+    <td>
+        <a href="{{ url_for('listTopics',node_title= node_title) }}?page={{ index + 1}}">{{ index + 1}}</a>
+    </td>
+    {% endfor %}
+</tr>
+<hr>
 <a href="/node/{{node_title}}/new_topic">新建話題</a>
 {% endblock %}

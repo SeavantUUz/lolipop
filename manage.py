@@ -36,13 +36,14 @@ def index():
     return render_template('index.html',nodes = nodes)
 
 @app.route("/node/<node_title>")
-def listTopics(node_title):
+def listTopics(node_title,page=None):
     page = request.args.get('page',1,type=int)
 
     node = Node.query.filter(Node.title == node_title).first()
-    topics = Topic.query.filter(Topic.node_id== node.id)
+    topics = Topic.query.filter(Topic.node_id== node.id).order_by(Topic.last_post_id.desc())
     # here 7 is a magic number and it only for testing
-    topics_pages = topics.count()/7+1
+    topics_count = topics.count()
+    topics_pages = (topics_count-1)/7+1
     topics = topics.paginate(page,7,True)
     return render_template('nodes.html',node_title=node_title,topics = topics,topics_pages = topics_pages)
     
@@ -76,9 +77,8 @@ def listPosts(node_title,topic_id,page=None):
     if current_user is not None and current_user.is_authenticated() and form.validate_on_submit():
         form.save(current_user,topic)
         if not posts_count % 7:
-            page_count = page+1
-        else:page_count = page
-        return redirect(url_for('listPosts',node_title=node_title,topic_id=topic_id,page=page_count))
+            page = page+1
+        return redirect(url_for('listPosts',node_title=node_title,topic_id=topic_id,page=page))
     elif form.validate_on_submit():
         return redirect(url_for('login'))
     return render_template('posts.html',topic = topic,node=node,posts=posts,form=form,posts_pages = posts_pages,page=page)

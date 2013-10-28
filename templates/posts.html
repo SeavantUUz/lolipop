@@ -5,15 +5,14 @@
     {% for post in posts.items %}
     <li>{{ post.content }} <a href="/edit/{{node.id}}/post/{{ post.id }}">编辑</a> <a href="/delete/{{node.id}}/post/{{ post.id }}">删除</a></li>
     {% endfor %}
+</ul>
     <tr>
     {% for index in range(posts_pages) %}
     <td>
-        <a href="{{ url_for('listPosts',node_title=node.title,topic_id=topic.id) }}?page={{ index+1 }}">{{ index +1 }}
-        </a>
+        <a href="{{ url_for('listPosts',node_title=node.title,topic_id=topic.id) }}?page={{ index+1 }}">{{ index +1 }}</a>
     <td>
     {% endfor %}
     </tr>
-</ul>
 <br />
 <form class="form" method="POST">
     {{ form.csrf_token }}
