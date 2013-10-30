@@ -1,4 +1,4 @@
-import os
+import os,string
 from flask.ext.script import Manager,Server
 from flask.ext.login import current_user,login_user,login_required,logout_user
 from config import db,login_manager
@@ -147,10 +147,20 @@ def editPost(node_id,post_id):
 @app.route('/admin')
 @admin_required
 def admin():
-    posts = Post.query.all()
-    topics = Topic.query.all()
-    users = User.query.filter(User.id != 1).all()
-    return render_template('admin.html',posts = posts,topics = topics,users = users)
+    nodes = Node.query.all()
+    return render_template('admin.html',nodes=nodes)
+
+@app.route('/admin/<Objects>')
+@admin_required
+def adminObjects(Objects):
+    scope = {}
+    if Objects == 'Topic':
+        scope[Objects]=Topic
+    elif Objects == 'User':
+        scope[Objects]=User
+    exec 'Objects = '+Objects in scope
+    objects = scope['Objects'].query.all()
+    return render_template('objects.html',objects = objects,objects_name=Objects)
 
 @app.route('/delete/topic/<int:topic_id>')
 @admin_required

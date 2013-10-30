@@ -52,6 +52,9 @@ class User(db.Model,UserMixin):
     def _get_password(self):
         return self._password
 
+    def get_name(self):
+        return self.username
+
 
     password = db.synonym('_password',descriptor = property(_get_password,_set_password))
 
@@ -173,6 +176,9 @@ class Topic(db.Model):
     def __init__(self,title=None):
         if title:
             self.title = title
+
+    def get_name(self):
+        return self.title
 
     @property
     def second_last_post_id(self):

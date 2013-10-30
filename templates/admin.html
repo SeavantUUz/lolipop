@@ -1,13 +1,14 @@
-<html>
+{% extends "layout.html" %}
+
+{% block content %}
+<h3>我是管理员！</h3>
+<hr>
 <ul>
     <p><a href="/addNode">增加一个节点</a>
-    {% for topic in topics %}
-    <p>{{topic.title}} <a href='/delete/topic/{{ topic.id }}'>删除</a>
+    {% for node in nodes %}
+    <p>{{node.title}}</p> <a href='/delete/node/{{ node.id }}'>删除</a>
     {% endfor %}
 </ul>
-<ul>
-    {% for user in users %}
-    <p>{{user.username}} <a href='/delete/user/{{ user.id }}'>block</a>
-    {% endfor %}
-</ul>
-</html>
+<a href='/admin/Topic'>话题</a>
+<a href='/admin/User'>用户</a>
+{% endblock %}
