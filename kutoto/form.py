@@ -4,13 +4,27 @@ from wtforms import TextField,TextAreaField,PasswordField,BooleanField
 from wtforms.validators import DataRequired,Required,EqualTo
 from kutoto.models import Post,Topic,User,Node
 from datetime import datetime
+import misaka as m
+from misaka import HtmlRenderer,SmartyPants
+
+
+def GFMDecorator(func):
+    def wrapper(self,*args):
+        content = m.html(self.content.data)
+    return wrapper
+
+
+
 
 class NewTopic(Form):
     subject = TextField(u'标题',validators=[DataRequired(message=u'标题')])
     content = TextAreaField(u'内容',validators=[DataRequired(u'内容')])
+    def _getContentData(self,*args):
+        return self.content.data
+
     def save(self,node,user):
         topic = Topic(title = self.subject.data)
-        post = Post(content = self.content.data)
+        post = Post(content = self._getContentData())
         return topic.save(node=node,user = user,post = post)
 
 class ReplyPost(Form):
