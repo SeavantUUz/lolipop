@@ -3,7 +3,7 @@
 {% block content %}
 <ul>
     {% for post in posts.items %}
-    <li>{{ post.content }} <a href="/edit/{{node.id}}/post/{{ post.id }}">编辑</a> <a href="/delete/{{node.id}}/post/{{ post.id }}">删除</a></li>
+    <li>{{ post.content|safe }} <a href="/edit/{{node.id}}/post/{{ post.id }}">编辑</a> <a href="/delete/{{node.id}}/post/{{ post.id }}">删除</a></li>
     {% endfor %}
 </ul>
     <tr>

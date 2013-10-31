@@ -5,38 +5,34 @@ from wtforms.validators import DataRequired,Required,EqualTo
 from kutoto.models import Post,Topic,User,Node
 from datetime import datetime
 import misaka as m
-from misaka import HtmlRenderer,SmartyPants
+from config import BleepRenderer
+from jinja2 import Markup
 
-
-def GFMDecorator(func):
-    def wrapper(self,*args):
-        content = m.html(self.content.data)
-    return wrapper
-
-
-
+def _renderToGFM(data):
+    renderer = BleepRenderer()
+    md = m.Markdown(renderer,
+            extensions=m.EXT_FENCED_CODE | m.EXT_NO_INTRA_EMPHASIS)
+    return md.render(data)
 
 class NewTopic(Form):
     subject = TextField(u'标题',validators=[DataRequired(message=u'标题')])
     content = TextAreaField(u'内容',validators=[DataRequired(u'内容')])
-    def _getContentData(self,*args):
-        return self.content.data
 
     def save(self,node,user):
         topic = Topic(title = self.subject.data)
-        post = Post(content = self._getContentData())
+        post = Post(content = _renderToGFM(self.content.data))
         return topic.save(node=node,user = user,post = post)
 
 class ReplyPost(Form):
     content = TextAreaField(u'内容',validators=[DataRequired(u'内容')])
     def save(self,user,topic):
-        post = Post(content = self.content.data)
+        post = Post(content = _renderToGFM(self.content.data))
         return post.save(user = user,topic = topic)
 
 class EditPost(Form):
     content = TextAreaField(u'内容',validators=[DataRequired(u'内容')])
     def save(self,post):
-        post.content = self.content.data
+        post.content = _renderToGFM(self.content.data)
         return post.save()
 
 class RegisterUser(Form):
