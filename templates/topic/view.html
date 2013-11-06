@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+
+{% from "macro/form.html" import render_field %}
+{% from "macro/ui.html" import topic_list, pagination %}
+
+{% block content %}
+<div class="module">
+  <div class="module-body item-list reply-list">
+    {% if paginator.items >1 %}
+    {% for item in paginator.items %}
+    <div class="item hentry">
+      <div class="entry-content">{{item.content}}</div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="inner">
+      <div class="alert alert-info">暂时还没有回复哦～</div>
+    </div>
+    {% endif %}
+  </div>
+
+  {% if paginator.pages > 1 %}
+  <div class="module-footer inner">
+    {{ pagination(paginator, url_for('topic.view', uid=topic.id)) }}
+  </div>
+  {% endif %}
+</div>
+
+<div class="module">
+  {% if form %}
+  <form class="reply-form inner" action="{{url_for('topic.reply', uid=topic.id)}}" method="post">
+    {{ form.csrf_token }}
+    {{ render_field(form.content, 'input-block-level') }}
+    <div class="form-submit text-right">
+      <button class="btn btn-success">回复</button>
+    </div>
+  </form>
+  {% else %}
+  <div class="inner">
+    <div class="alert alert-info">需要登录的说～</div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
+
