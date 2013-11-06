@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block content %}
+{% from "macro/ui.html" import topic_list,pagination %}
+<div class="module">
+<div class="module-body">
+    {{ topic_list(paginator.items) }}
+</div>
+{% if paginator.pages >1 %}
+<div class="module-footer inner">
+    {{ pagination(paginator,url_for(endpoint)) }}
+</div>
+{% endif %}
+</div>
+{% endblock %}
