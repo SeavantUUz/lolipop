@@ -1,19 +1,44 @@
-<html>
-<link rel="stylesheet" href="static/style.css" />
-<link rel="stylesheet" href="static/pygments.css" />
+<!DOCTYPE HTML>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>少女所见的日本原风景</title>
-</head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>浅间神社</title>
+  </head>
+<link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap-responsive.css') }}" />
+<link rel="stylesheet" href="{{ url_for('static',filename='css/pygments.css') }}" />
+<link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap.css') }}" />
+<link rel="stylesheet" href="{{ url_for('static',filename='css/site.css') }}" />
+
+<head>
 
 <body>
-    <title>少女所见的日本原风景</title>
-    <a href="/index"><h5>Kochiya Sanae</h5></a> <a href="/register">注册</a> <a href="/login">登录</a> <a href="/logout">登出</a>
-    <hr> 
+    {% from "macro/ui.html" import nav%}
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <div class="nav-collapse collapse">
+            {%- block nav %}
+            {{ nav() }}
+            {%- endblock %}
+          </div>
+        </div>
+      </div>
+    </div>
 
-<div class="main">
-    {% block content %} 
+ <div id="wrap">
+      <div class="main container">
+        {% block main %}
+        <div class="row-fluid">
+          <div class="span8">
+            {% block content %}{% endblock %}
+          </div>
+        </div>
+        {% endblock %}
+      </div>
+    </div>
+    {% block footer %}
     {% endblock %}
-</div>
-</body>
+    {% block afterscript %}{% endblock %}
+  </body>
 </html>

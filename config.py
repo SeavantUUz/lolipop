@@ -8,6 +8,12 @@ from misaka import HtmlRenderer,SmartyPants
 db = SQLAlchemy()
 login_manager = LoginManager()
 
+def force_int(value,default=1):
+    try:
+        return int(value)
+    except:
+        return default
+
 class BleepRenderer(HtmlRenderer,SmartyPants):
     ''' code highlight '''
     def block_code(self,text,lang):

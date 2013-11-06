@@ -1,14 +1,15 @@
 {% extends "layout.html" %}
 
+{% from "macro/ui.html" import topic_list %}
 {% block content %}
-<ul>
-    {% for node in nodes %}
-    <li>
-    <a href="/node/{{ node.title }}">{{ node.title }}</a>
-    <hr>
-    <p>{{ node.description }}</p>
-    </li>
-    {% endfor %}
-</ul>
-<br />
+
+<div class="module">
+  <div class="module-header inner">
+    <strong>最近讨论</strong>
+  </div>
+  <div class="module-body">
+    {{ topic_list(topics) }}
+  </div>
+</div>
+
 {% endblock %}

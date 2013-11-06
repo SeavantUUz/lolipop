@@ -70,6 +70,6 @@ class AddNodeForm(Form):
     
     def save(self):
         node = Node(title=self.title.data,
-                description = self.description.data,
+                description = _renderToGFM(self.description.data),
                 )
         return node.save()

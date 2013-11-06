@@ -180,6 +180,12 @@ class Topic(db.Model):
     def get_name(self):
         return self.title
 
+    def __str__(self):
+        return self.title
+
+    def __repr__(self):
+        return '<Topic:%s>' % self.id
+
     @property
     def second_last_post_id(self):
         return self.posts[-2].id

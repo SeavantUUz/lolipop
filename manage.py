@@ -13,6 +13,9 @@ login_manager.init_app(app)
 manager = Manager(app)
 manager.add_command("runserver",Server("localhost",port=8000))
 
+from views import topic
+app.register_blueprint(topic.bp,url_prefix='/topic')
+
 def admin_required(func):
     @wraps(func)
     def decorated_view(*args,**kwargs):
@@ -32,8 +35,7 @@ def load_user(userid):
 @app.route("/index")
 def index():
     #nodes = Nodes.query.order_by(Topic.last_post_id.desc())
-    nodes = Node.query.all()
-    return render_template('index.html',nodes = nodes)
+    return render_template('index.html')
 
 @app.route("/node/<node_title>")
 def listTopics(node_title,page=None):
@@ -158,7 +160,7 @@ def adminObjects(Objects):
         scope[Objects]=Topic
     elif Objects == 'User':
         scope[Objects]=User
-    exec 'Objects = '+Objects in scope
+    exec 'Objects = ' + Objects in scope
     objects = scope['Objects'].query.all()
     return render_template('objects.html',objects = objects,objects_name=Objects)
 
