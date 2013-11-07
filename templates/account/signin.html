@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% from "macro/form.html" import vertical_field %}
+
+{% block subtitle %}登录{% endblock %}
+
+{% block main %}
+<form class="form-single" method="post" action="">
+  <h2>浅间神社</h2>
+  {{ form.csrf_token }}
+  {{ vertical_field(form.account, 'input-block-level') }}
+  {{ vertical_field(form.password, 'input-block-level') }}
+
+  <div class="form-submit">
+    <button class="btn btn-success">登录</button>
+  </div>
+</form>
+{% endblock %}
