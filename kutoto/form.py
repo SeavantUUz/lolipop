@@ -23,7 +23,7 @@ class NewTopic(Form):
         post = Post(content = _renderToGFM(self.content.data))
         return topic.save(node=node,user = user,post = post)
 
-class ReplyPost(Form):
+class ReplyForm(Form):
     content = TextAreaField(u'内容',validators=[DataRequired(u'内容')])
     def save(self,user,topic):
         post = Post(content = _renderToGFM(self.content.data))
@@ -35,8 +35,8 @@ class EditPost(Form):
         post.content = _renderToGFM(self.content.data)
         return post.save()
 
-class RegisterUser(Form):
-    username = TextField(u"用户名",validators=[Required(message=u"填写用户名")])
+class RegisterForm(Form):
+    account = TextField(u"用户名",validators=[Required(message=u"填写用户名")])
     email = TextField(u"电子邮箱",validators = [Required(message=u"填写电子邮箱")])
     password = PasswordField(u'密码',validators = [Required(message=u"填写密码")])
     confirm_password = PasswordField(u'重新输入密码',validators = [Required(message=u"重新输入密码"),EqualTo("password",message=u'密码不匹配')])
@@ -52,15 +52,15 @@ class RegisterUser(Form):
             raise ValidationError("This email is token")
 
     def save(self):
-        user = User(username=self.username.data,
+        user = User(username=self.account.data,
                 email=self.email.data,
                 password=self.password.data,
                 date_joined = datetime.utcnow(),
                 )
         return user.save()
 
-class LoginUser(Form):
-    username = TextField(u"用户名",validators=[Required(message=u"填写用户名")])
+class LoginForm(Form):
+    account = TextField(u"用户名",validators=[Required(message=u"填写用户名")])
     password = PasswordField(u'密码',validators = [Required(message=u"填写密码")])
     remember_me = BooleanField(u'记住我',default = False)
 
