@@ -13,9 +13,10 @@ login_manager.init_app(app)
 manager = Manager(app)
 manager.add_command("runserver",Server("localhost",port=8000))
 
-from views import topic,account
+from views import topic,account,node
 app.register_blueprint(topic.bp,url_prefix='/topic')
 app.register_blueprint(account.bp,url_prefix='/account')
+app.register_blueprint(node.bp,url_prefix='/node')
 
 @app.route("/")
 @app.route("/index")

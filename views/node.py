@@ -1,22 +1,23 @@
-from flask import redirect,render_template,url_for,flash,abort,Blueprint
+from flask import redirect,render_template,url_for,flash,abort,request,Blueprint
 from config import force_int
 from kutoto.form import NodeForm
+from kutoto.models import Node,Topic
 
 bp = Blueprint("node",__name__)
 
-@bp.route('/'):
+@bp.route('/')
 def nodes():
     nodes = Node.query.order_by(Node.id.desc()).all()
     return render_template('node/nodes.html',nodes = nodes)
 
 @bp.route('/<urlname>')
-def view():
+def view(urlname):
    node = Node.query.filter_by(title=urlname).first_or_404() 
    page = force_int(request.args.get('page',1),0)
    if not page:
        return abort(404)
-   paginator = Topic.query.order_by(Topic.id.desc()).paginate(page,7)
-   return render_template('node/view.html',node=node,paginate=paginate)
+   paginator = Topic.query.filter_by(node_id=node.id).order_by(Topic.id.desc()).paginate(page,7)
+   return render_template('node/view.html',node=node,paginator=paginator)
 
 @bp.route('/create',methods=['GET','POST'])
 def create():

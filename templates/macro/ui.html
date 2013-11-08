@@ -2,6 +2,7 @@
 <ul class="nav">
   <li {% if current == 'home' %}class="active"{% endif %}><a href="/">主页</a></li>
   <li {% if current == 'topic' %}class="active"{% endif %}><a href="{{url_for('topic.topics')}}">话题</a></li>
+  <li {% if current == 'node' %}class="active"{% endif %}><a href="{{url_for('node.nodes')}}">节点</a></li>
 </ul>
 {%- endmacro %}
 
@@ -41,4 +42,14 @@
   </div>
 </div>
 {% endif %}
+{% endmacro %}
+
+{% macro node_list(items,show_button=True) %}
+<div class="node-list item-list">
+  {% for item in items %}
+  <div class="item hentry">
+    <h3 class="title"><a href="{{url_for('node.view', urlname=item.title)}}">{{item.title}}</a></h3>
+  </div>
+  {% endfor %}
+</div>
 {% endmacro %}

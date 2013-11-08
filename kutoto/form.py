@@ -64,7 +64,7 @@ class LoginForm(Form):
     password = PasswordField(u'密码',validators = [Required(message=u"填写密码")])
     remember_me = BooleanField(u'记住我',default = False)
 
-class AddNodeForm(Form):
+class NodeForm(Form):
     title = TextField(u'Node Name',validators = [Required(message=u'填写Node的名字')])
     description = TextAreaField(u'Node 描述',validators = [Required(message=u'请填写描述')])
     
