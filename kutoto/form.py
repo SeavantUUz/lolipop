@@ -14,7 +14,7 @@ def _renderToGFM(data):
             extensions=m.EXT_FENCED_CODE | m.EXT_NO_INTRA_EMPHASIS)
     return md.render(data)
 
-class NewTopic(Form):
+class CreateForm(Form):
     subject = TextField(u'标题',validators=[DataRequired(message=u'标题')])
     content = TextAreaField(u'内容',validators=[DataRequired(u'内容')])
 

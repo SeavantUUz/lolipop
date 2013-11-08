@@ -4,7 +4,7 @@ from flask.ext.login import current_user
 from jinja2 import TemplateNotFound
 from kutoto.models import Post,Topic,User,Node
 from config import force_int
-from kutoto.form import ReplyForm
+from kutoto.form import ReplyForm,CreateForm
 
 bp = Blueprint('topic',__name__)
 
@@ -41,7 +41,7 @@ def view(uid):
 @bp.route('/create/<int:nodename>',methods=('GET','POST'))
 def create(nodename):
     node = Node.query.filter(Node.title == nodename).first_or_404()
-    form = NewTopic()
+    form = CreateForm()
     if form.validate_on_submit():
         form.save(node,current_user)
         return redirect(url_for('.topics'))
