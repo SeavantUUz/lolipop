@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block subtitle %}节点{% endblock %}
+
+{% from "macro/ui.html" import nav %}
+
+{% block nav %}
+{{ nav('node') }}
+{% endblock %}
+
+{% block content %}
+{% from "macro/ui.html" import node_list %}
+<div class="module">
+  <div class="module-header inner">
+    <strong>节点</strong>
+  </div>
+  <div class="module-body">
+    {{ node_list(nodes) }}
+  </div>
+</div>
+{% endblock %}

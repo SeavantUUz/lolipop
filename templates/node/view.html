@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+{% block subtitle %}节点{% endblock %}
+
+{% from "macro/ui.html" import nav %}
+
+{% block nav %}
+{{ nav('node') }}
+{% endblock %}
+
+{% block content %}
+{% from "macro/ui.html" import topic_list, pagination %}
+<div class="module">
+  <div class="module-header inner">
+    <strong>主题</strong>
+  </div>
+  <div class="module-body">
+    {{ topic_list(paginator.items) }}
+  </div>
+  {% if paginator.pages > 1 %}
+  <div class="module-footer inner">
+    {{ pagination(paginator, url_for('node.view', urlname=node.title)) }}
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
