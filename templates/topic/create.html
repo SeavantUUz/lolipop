@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% from "macro/form.html" import render_field %}
+
+{% block subtitle %}新的主题{% endblock %}
+
+{% block main %}
+<div class="row-fluid">
+  <div class="span6">
+    <div class="module">
+      <div class="module-header inner">
+        <strong>新的主题</strong>
+      </div>
+      <form class="form topic-form" method="post" action="">
+        <div class="inner">
+          {{ form.csrf_token }}
+
+          {{ render_field(form.subject, 'input-block-level') }}
+          {{ render_field(form.content, 'input-block-level') }}
+        </div>
+        <div class="module-footer inner text-right">
+          <button class="btn btn-success">创建</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
