@@ -15,8 +15,8 @@ def _renderToGFM(data):
     return md.render(data)
 
 class CreateForm(Form):
-    subject = TextField(u'标题',validators=[DataRequired(message=u'标题')])
-    content = TextAreaField(u'内容',validators=[DataRequired(u'内容')])
+    subject = TextField(u'标题',validators=[DataRequired(message=u'标题')],description=u'这里填写标题哦')
+    content = TextAreaField(u'内容',validators=[DataRequired(u'内容')],description=u'这里填写内容的说')
 
     def save(self,node,user):
         topic = Topic(title = self.subject.data)

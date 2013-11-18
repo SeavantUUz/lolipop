@@ -1,10 +1,11 @@
 # coding: utf-8
 from flask import Blueprint,render_template,redirect,abort,url_for,request
-from flask.ext.login import current_user
+from flask.ext.login import current_user,login_required
 from jinja2 import TemplateNotFound
 from kutoto.models import Post,Topic,User,Node
 from config import force_int
 from kutoto.form import ReplyForm,CreateForm
+from views.account import admin_required
 
 bp = Blueprint('topic',__name__)
 
@@ -38,9 +39,10 @@ def view(uid):
         form = ReplyForm()
     return render_template('topic/view.html',form=form,topic=topic,paginator=paginator)
     
-@bp.route('/create/<int:nodename>',methods=('GET','POST'))
-def create(nodename):
-    node = Node.query.filter(Node.title == nodename).first_or_404()
+@bp.route('/create/<urlname>',methods=('GET','POST'))
+@login_required
+def create(urlname):
+    node = Node.query.filter(Node.title == urlname).first_or_404()
     form = CreateForm()
     if form.validate_on_submit():
         form.save(node,current_user)
@@ -58,6 +60,7 @@ def reply(uid):
     return redirect(url_for('.view',uid=uid))
 
 @bp.route('/delete/<int:uid>')
+@admin_required
 def delete(uid):
     topic = Topic.query.get_or_404(uid)
     topic.delete()

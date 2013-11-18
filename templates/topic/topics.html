@@ -1,5 +1,11 @@
 {% extends "layout.html" %}
 
+{% from "macro/ui.html" import nav %}
+
+{% block nav %}
+{{ nav('topic') }}
+{% endblock %}
+
 {% block content %}
 {% from "macro/ui.html" import topic_list,pagination %}
 <div class="module">

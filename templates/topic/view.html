@@ -1,7 +1,13 @@
 {% extends "layout.html" %}
 
+{% block subtitle %}话题{% endblock %}
+
 {% from "macro/form.html" import render_field %}
-{% from "macro/ui.html" import topic_list, pagination %}
+{% from "macro/ui.html" import topic_list, pagination, nav %}
+
+{% block nav %}
+{{ nav('topic') }}
+{% endblock %}
 
 {% block content %}
 <div class="module">
