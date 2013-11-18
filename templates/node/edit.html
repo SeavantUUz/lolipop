@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+{% from "macro/form.html" import horizontal_field, horizontal_form_button %}
+
+{% block subtitle %}编辑节点{% endblock %}
+
+{% block content %}
+<div class="module">
+  <div class="module-header inner">
+    <strong>编辑节点</strong>
+  </div>
+  <form class="form-horizontal inner" method="post" action="">
+    {{ form.csrf_token }}
+
+    {{ horizontal_field(form.title, 'input-block-level') }}
+    {{ horizontal_field(form.description, 'input-block-level') }}
+
+    {{ horizontal_form_button('保存', 'btn-success') }}
+  </form>
+</div>
+{% endblock %}
