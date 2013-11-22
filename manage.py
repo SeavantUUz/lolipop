@@ -2,7 +2,7 @@ import os,string
 from flask.ext.script import Manager,Server
 from flask.ext.login import current_user,login_user,login_required,logout_user
 from config import db,login_manager
-from app import create_app
+from app import create_app,register_jinja
 #from kutoto.form import ,EditPost,AddNodeForm
 from kutoto.models import Post,Topic,User,Node
 from flask import redirect,render_template,url_for,request,flash,abort,current_app

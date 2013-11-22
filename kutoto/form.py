@@ -4,15 +4,6 @@ from wtforms import TextField,TextAreaField,PasswordField,BooleanField
 from wtforms.validators import DataRequired,Required,EqualTo
 from kutoto.models import Post,Topic,User,Node
 from datetime import datetime
-import misaka as m
-from config import BleepRenderer
-from jinja2 import Markup
-
-def _renderToGFM(data):
-    renderer = BleepRenderer()
-    md = m.Markdown(renderer,
-            extensions=m.EXT_FENCED_CODE | m.EXT_NO_INTRA_EMPHASIS)
-    return md.render(data)
 
 class CreateForm(Form):
     subject = TextField(u'标题',validators=[DataRequired(message=u'标题')],description=u'这里填写标题哦')
@@ -20,19 +11,19 @@ class CreateForm(Form):
 
     def save(self,node,user):
         topic = Topic(title = self.subject.data)
-        post = Post(content = _renderToGFM(self.content.data))
+        post = Post(content = self.content.data)
         return topic.save(node=node,user = user,post = post)
 
 class ReplyForm(Form):
     content = TextAreaField(u'内容',validators=[DataRequired(u'内容')])
     def save(self,user,topic):
-        post = Post(content = _renderToGFM(self.content.data))
+        post = Post(content = self.content.data)
         return post.save(user = user,topic = topic)
 
 class EditPost(Form):
     content = TextAreaField(u'内容',validators=[DataRequired(u'内容')])
     def save(self,post):
-        post.content = _renderToGFM(self.content.data)
+        post.content = self.content.data
         return post.save()
 
 class RegisterForm(Form):
@@ -70,6 +61,6 @@ class NodeForm(Form):
     
     def save(self):
         node = Node(title=self.title.data,
-                description = _renderToGFM(self.description.data),
+                description = self.description.data,
                 )
         return node.save()

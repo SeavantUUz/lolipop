@@ -14,7 +14,7 @@ def admin_required(func):
         try:
             if not current_user.id == 1:
                 abort(403)
-            return fun(*args,**kwargs)
+            return func(*args,**kwargs)
         except AttributeError:
             abort(403)
     return decorated_view

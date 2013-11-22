@@ -8,6 +8,19 @@
 {{ nav('node') }}
 {% endblock %}
 
+{% block declaration %}
+<div class="module">
+  <div class="module-header inner">
+    <strong>简述</strong>
+  </div>
+  <div class="module-body item-list">
+    <div class="item hentry">
+      <div class="entry-content">{{ node.description|renderToGFM|safe }}</div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
 {% block content %}
 {% from "macro/ui.html" import topic_list, pagination %}
 <div class="module">

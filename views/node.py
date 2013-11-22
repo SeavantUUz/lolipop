@@ -2,6 +2,8 @@ from flask import redirect,render_template,url_for,flash,abort,request,Blueprint
 from config import force_int
 from kutoto.form import NodeForm
 from kutoto.models import Node,Topic
+from flask.ext.login import current_user
+from views.account import admin_required
 
 bp = Blueprint("node",__name__)
 
@@ -20,14 +22,16 @@ def view(urlname):
    return render_template('node/view.html',node=node,paginator=paginator)
 
 @bp.route('/create',methods=['GET','POST'])
+@admin_required
 def create():
     form = NodeForm()
     if form.validate_on_submit():
         node = form.save()
         return redirect(url_for('.view',urlname=node.title))
-    return render_template('node/create.html',form=form)
+    return render_template('node/create.html',form=form,current_user = current_user)
 
 @bp.route('/<urlname>/edit',methods=['GET','POST'])
+@admin_required
 def edit(urlname):
     node = Node.query.filter_by(title=urlname).first_or_404()
     form = NodeForm(obj=node)
@@ -35,4 +39,4 @@ def edit(urlname):
         form.populate_obj(node)
         node.save()
         return redirect(url_for('.view',urlname=node.title))
-    return render_template('node/edit.html',form=form,node=node)
+    return render_template('node/edit.html',form=form,node=node,current_user=current_user)

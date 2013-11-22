@@ -15,7 +15,7 @@
     {% if paginator.items >1 %}
     {% for item in paginator.items %}
     <div class="item hentry">
-      <div class="entry-content">{{item.content|safe}}</div>
+      <div class="entry-content">{{item.content|renderToGFM|safe}}</div>
     </div>
     {% endfor %}
     {% else %}
