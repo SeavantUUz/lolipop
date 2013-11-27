@@ -42,7 +42,6 @@ class User(db.Model,UserMixin):
     #care_nodes = db.Column(db.String,nullable = True)
     posts = db.relationship("Post",backref="user",lazy="dynamic")
     topics = db.relationship("Topic",backref="user",lazy="dynamic")
-    score = db.Column(db.Integer,default = 0)
     
     # synonym method replace a column by another name
     # descriptor is a parameter in sqlalchemy
@@ -108,6 +107,33 @@ class User(db.Model,UserMixin):
         db.session.delete(self)
         db.session.commit()
         return self
+
+class Profile(db.Model):
+    __tablename__ = "profiles"
+    id = db.Column(db.Integer,primary_key=True)
+    avatar = db.Column(db.String(200))
+    website = db.Column(db.String(400),nullable=True)
+    weibo = db.Column(db.String(100),nullable=True)
+    twitter = db.Column(db.String(100),nullable=True)
+    description = db.Column(db.Text)
+    significant = db.Column(db.Text,nullable = True)
+    rankPoint = db.Column(db.Integer,default = 0)
+    
+    @classmethod
+    def get_or_create(cls,uid):
+        item = cls.query.get(uid)
+        if item:
+            return item
+        item = cls(id=uid)
+        db.session.add(item)
+        db.session.commit()
+        return item
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+        return self
+    
 
 class Post(db.Model):
     __tablename__="posts"

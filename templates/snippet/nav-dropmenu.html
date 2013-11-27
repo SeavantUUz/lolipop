@@ -5,6 +5,7 @@
   <ul class="dropdown-menu" role="menu">
     <li class="divider"></li>
     {% if current_user.id == 1 %}<li><a href="#">后台管理</a></li>{% endif %}
+    <li><a href="{{url_for('account.profile',uid=current_user.id)}}">个人资料</a></li>    
     <li><a href="{{url_for('account.logout')}}">登出</a></li>
   </ul>
 </li>

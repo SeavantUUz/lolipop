@@ -25,6 +25,7 @@ app.register_blueprint(user.bp,url_prefix='/user')
 def index():
     topics = Topic.query.order_by(Topic.last_post_id.desc()).limit(15)
     return render_template('index.html',topics=topics)
+    #return 'hello world'
 
 @manager.command
 def init():
@@ -32,7 +33,6 @@ def init():
     if os.path.exists(dfile):
         os.remove(dfile)
     db.create_all()
-
 
 if __name__ == "__main__":
     manager.run()

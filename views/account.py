@@ -3,8 +3,8 @@ from functools import wraps
 from flask import abort,Blueprint,render_template,redirect,request,url_for,flash
 from config import login_manager
 from flask.ext.login import current_user,login_user,login_required,logout_user
-from kutoto.models import User
-from kutoto.form import RegisterForm,LoginForm
+from kutoto.models import User,Profile
+from kutoto.form import RegisterForm,LoginForm,ProfileForm
 
 bp = Blueprint('account',__name__)
 
@@ -54,7 +54,19 @@ def logout():
     flash(("Logged out"),"success")
     return redirect(url_for('index'))
 
-@bp.route('/profile/uid=<int:uid>')
+@bp.route('/profile/uid=<int:uid>',methods=['GET','POST'])
 @login_required
 def profile(uid):
-    return "kochiya sanae"
+    user = current_user
+    profile = Profile.get_or_create(uid)
+
+    form = ProfileForm(obj=profile)
+    #next_url = request.args.get('next',url_for('.setting')) 
+    if form.validate_on_submit():
+        user = User.query.get_or_404(current_user.id)
+        form.populate_obj(user)
+        form.populate_obj(profile)
+        profile.save()
+        user.save()
+        return redirect(url_for('index'))
+    return render_template('account/profile.html',form=form,profile=profile)
