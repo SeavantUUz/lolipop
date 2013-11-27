@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% from "macro/form.html" import horizontal_field, horizontal_disabled_field,horizontal_form_button %}
+
+{% block subtitle %}个人资料{% endblock %}
+
+{% block content %}
+<div class="module">
+  <div class="module-header inner">
+    <strong>个人资料</strong>
+  </div>
+
+  <form class="form-horizontal inner" method="post" action="">
+    {{ form.csrf_token }}
+      {% if profile.avatar %}
+  <img class="pull-left" src="{{profile.avatar}}" alt="{{user}}" width="86" height="86" />
+  {% endif %}
+    {{ horizontal_disabled_field(form.username,'input-block-level') }}
+    {{ horizontal_disabled_field(form.email, 'input-block-level') }}
+    {{ horizontal_field(form.avatar, 'input-block-level') }}
+    {{ horizontal_field(form.website, 'input-block-level') }}
+    {{ horizontal_field(form.weibo, 'input-block-level') }}
+    {{ horizontal_field(form.twitter, 'input-block-level') }}
+    {{ horizontal_field(form.description, 'input-block-level') }}
+    {{ horizontal_field(form.significant, 'input-block-level') }}
+
+    {{ horizontal_form_button('更新', 'btn-success') }}
+  </form>
+</div>
+{% endblock %}

@@ -133,7 +133,6 @@ class Profile(db.Model):
         db.session.add(self)
         db.session.commit()
         return self
-    
 
 class Post(db.Model):
     __tablename__="posts"

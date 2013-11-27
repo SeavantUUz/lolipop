@@ -10,9 +10,18 @@
 
 {% macro render_field(field, class='') %}
 {%- if field.description %}
-{{field(class_=class, placeholder=field.description)}}
+{{field(class_=class,placeholder=field.description)}}
 {%- else %}
 {{field(class_=class)}}
+{%- endif %}
+{{ render_errors(field.errors) }}
+{% endmacro %}
+
+{% macro render_disabled_field(field, class='') %}
+{%- if field.description %}
+{{field(class_=class,disabled = True,placeholder=field.description)}}
+{%- else %}
+{{field(class_=class,disabled = True)}}
 {%- endif %}
 {{ render_errors(field.errors) }}
 {% endmacro %}
@@ -35,11 +44,20 @@
 {%- endmacro %}
 
 
-{%- macro horizontal_field(field, class='') %}
+{%- macro horizontal_field(field,class='') %}
 <div class="{{ field_class('control-group', field) }}">
   {{field.label(class_='control-label')}}
   <div class="controls">
     {{ render_field(field, class) }}
+  </div>
+</div>
+{%- endmacro %}
+
+{%- macro horizontal_disabled_field(field,class='') %}
+<div class="{{ field_class('control-group', field) }}">
+  {{field.label(class_='control-label')}}
+  <div class="controls">
+    {{ render_disabled_field(field, class) }}
   </div>
 </div>
 {%- endmacro %}

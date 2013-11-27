@@ -1,7 +1,7 @@
 # coding:utf-8
 from functools import wraps
 from flask import abort,Blueprint,render_template,redirect,request,url_for,flash
-from config import login_manager
+from config import login_manager,MaxinObject
 from flask.ext.login import current_user,login_user,login_required,logout_user
 from kutoto.models import User,Profile
 from kutoto.form import RegisterForm,LoginForm,ProfileForm
@@ -59,14 +59,22 @@ def logout():
 def profile(uid):
     user = current_user
     profile = Profile.get_or_create(uid)
+    
+    # There are some trick codes,it is ugly
+    # but,it is run well
+    obj = MaxinObject()
+    obj_dict = {}
 
-    form = ProfileForm(obj=profile)
+    profile_dict = profile.__dict__
+    user_dict = user.__dict__
+    obj_dict.update(profile_dict)
+    obj_dict.update(user_dict)
+    for key in obj_dict:
+        obj.__setattr__(key,obj_dict[key])
+    form = ProfileForm(obj=obj)
     #next_url = request.args.get('next',url_for('.setting')) 
     if form.validate_on_submit():
-        user = User.query.get_or_404(current_user.id)
-        form.populate_obj(user)
         form.populate_obj(profile)
         profile.save()
-        user.save()
-        return redirect(url_for('index'))
+        return redirect(url_for('.profile',uid=uid))
     return render_template('account/profile.html',form=form,profile=profile)

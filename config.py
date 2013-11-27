@@ -25,3 +25,6 @@ class BleepRenderer(HtmlRenderer,SmartyPants):
         formatter = HtmlFormatter()
         return highlight(text,lexer,formatter)
 
+class MaxinObject(object):
+    pass
+

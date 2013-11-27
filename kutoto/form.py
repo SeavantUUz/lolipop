@@ -66,8 +66,8 @@ class NodeForm(Form):
         return node.save()
 
 class ProfileForm(Form):
-    username = TextField(u'显示名字',description = u'您的昵称')
-    email = TextField(u'电子邮箱',description = u'您的电子邮箱地址')
+    username = TextField(u'昵称',description = u'您的昵称')
+    email = TextField(u'email',description = u'您的电子邮箱地址')
     avatar = TextField(u'头像',description = u'请告知我您头像的外链地址?')
     website = TextField(u'website',description=u'您的私人网站(博客)?')
     weibo = TextField(u'新浪微博',description = u'您的新浪微博用户名?')
@@ -76,7 +76,7 @@ class ProfileForm(Form):
     significant = TextAreaField(u'签名',description = u'您的签名？支持markdown')
 
     def save(self,user):
-        profile = Profile(user_id=user.id,
+        profile = Profile(id=user.id,
                 avatar = self.avatar.data,
                 website = self.website.data,
                 weibo = self.weibo.data,
