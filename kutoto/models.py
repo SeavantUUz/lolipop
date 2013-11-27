@@ -38,7 +38,8 @@ class User(db.Model,UserMixin):
     email = db.Column(db.String(120),unique=True)
     username = db.Column(db.String(80),unique=True)
     _password = db.Column('password',db.String(80),nullable=False)
-    date_joined = db.Column(db.DateTime,default=datetime.utcnow())
+    date_joined = db.Column(db.DateTime,default=datetime.utcnow)
+    #care_nodes = db.Column(db.String,nullable = True)
     posts = db.relationship("Post",backref="user",lazy="dynamic")
     topics = db.relationship("Topic",backref="user",lazy="dynamic")
     score = db.Column(db.Integer,default = 0)
@@ -46,6 +47,23 @@ class User(db.Model,UserMixin):
     # synonym method replace a column by another name
     # descriptor is a parameter in sqlalchemy
     # property is python build-in method
+    #def __init__(self):
+        # It is a list which record all nodes you care
+
+    #def add_care_node(self,node_id):
+    #    self.care_nodes_list.append(node_id)
+    #    self.save_care_nodes()
+
+   # def remove_care_node(self,node_id):
+   #     self.care_nodes_list.remove(node_id)
+   #     self.save_care_nodes()
+
+   # def get_care_nodes(self):
+   #     return self.care_nodes_list
+
+   # def save_care_nodes(self):
+   #     self.care_nodes = ','.join(self.care_nodes_list)
+
     def _set_password(self,password):
         self._password = generate_password_hash(password)
 
@@ -103,7 +121,7 @@ class Post(db.Model):
     topic_id = db.Column(db.Integer,db.ForeignKey("topics.id",use_alter = True,name="fk_topic_id",ondelete="CASCADE"))
     user_id =  db.Column(db.Integer,db.ForeignKey("users.id"))
     content = db.Column(db.Text)
-    date_created = db.Column(db.DateTime,default=datetime.utcnow())
+    date_created = db.Column(db.DateTime,default=datetime.utcnow)
     dete_modified = db.Column(db.DateTime)
 
     def save(self,user=None,topic=None):
@@ -159,7 +177,7 @@ class Topic(db.Model):
     title = db.Column(db.String)
     node_id = db.Column(db.Integer,db.ForeignKey("nodes.id",use_alter=True,name="fk_node_id"))
     user_id = db.Column(db.Integer,db.ForeignKey("users.id"))
-    date_created = db.Column(db.DateTime,default=datetime.utcnow())
+    date_created = db.Column(db.DateTime,default=datetime.utcnow)
     viewed = db.Column(db.Integer,default = 0)
     post_count = db.Column(db.Integer,default = 0)
 

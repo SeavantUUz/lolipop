@@ -15,7 +15,7 @@ def topics():
     page = force_int(request.args.get('page',1),0)
     if not page:
         return abort(404)
-    paginator = Topic.query.order_by(Topic.date_created.desc()).paginate(page,7)
+    paginator = Topic.query.order_by(Topic.date_created.desc()).paginate(page,15)
     return render_template('topic/topics.html',paginator=paginator,endpoint='topic.topics')
 
 @bp.route('/latest')
@@ -24,7 +24,7 @@ def latest():
     page = force_int(request.args.get('page',1),0) 
     if not page:
         return abort(404)
-    paginator = Topic.query.order_by(Topic.id.desc()).paginate(page,7)
+    paginator = Topic.query.order_by(Topic.id.desc()).paginate(page,15)
     return render_template('topic/topics.html',paginator=paginator,endpoint='topic.latest')
 
 @bp.route('/<int:uid>',methods=('GET','POST'))
@@ -32,7 +32,7 @@ def view(uid):
     page = force_int(request.args.get('page',1),0)
     if not page:
         return abort(404)
-    paginator = Post.query.filter_by(topic_id=uid).paginate(page,7)
+    paginator = Post.query.filter_by(topic_id=uid).paginate(page,15)
     topic = Topic.query.get_or_404(uid)
     form = None
     if current_user is not None and current_user.is_authenticated():

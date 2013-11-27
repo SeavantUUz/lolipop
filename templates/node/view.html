@@ -2,6 +2,7 @@
 
 {% block subtitle %}节点{% endblock %}
 
+{% from "macro/form.html" import render_field %}
 {% from "macro/ui.html" import nav %}
 
 {% block nav %}
@@ -33,6 +34,25 @@
   {% if paginator.pages > 1 %}
   <div class="module-footer inner">
     {{ pagination(paginator, url_for('node.view', urlname=node.title)) }}
+  </div>
+  {% endif %}
+</div>
+
+<div class="module">
+  {% if form %}
+  <form class="form topic-form" action="{{url_for('topic.create', urlname=node.title)}}" method="post">
+    <div class="inner">
+    {{ form.csrf_token }}
+    {{ render_field(form.subject, 'input-block-level') }}
+    {{ render_field(form.content, 'input-block-level') }}
+  </div>
+    <div class="form-submit text-right">
+      <button class="btn btn-success">新建话题</button>
+    </div>
+  </form>
+  {% else %}
+  <div class="inner">
+    <div class="alert alert-info">需要登录的说～</div>
   </div>
   {% endif %}
 </div>

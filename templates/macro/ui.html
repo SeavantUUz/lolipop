@@ -3,6 +3,7 @@
   <li {% if current == 'home' %}class="active"{% endif %}><a href="/">主页</a></li>
   <li {% if current == 'topic' %}class="active"{% endif %}><a href="{{url_for('topic.topics')}}">话题</a></li>
   <li {% if current == 'node' %}class="active"{% endif %}><a href="{{url_for('node.nodes')}}">节点</a></li>
+   <li {% if current == 'user' %}class="active"{% endif %}><a href="{{url_for('user.users')}}">用户</a></li>
 </ul>
 {%- endmacro %}
 
@@ -50,6 +51,21 @@
   <div class="item hentry">
     <h3 class="title"><a href="{{url_for('node.view', urlname=item.title)}}">{{item.title}}</a></h3>
     <a class="btn btn-success btn-mini" href="{{url_for('topic.create', urlname=item.title)}}">新的话题</a>
+  </div>
+  {% endfor %}
+</div>
+{% endmacro %}
+
+{% macro user_list(items, show_badge=True) %}
+<div class="item-list user-list">
+  {% for user in items %}
+  <div class="item">
+      <div class="account-group">
+        <a href="{{url_for('user.view', uid=user.id)}}"><strong>{{user}}</strong></a>
+        <div class="meta">
+          <time>{{ user.date_joined.strftime('%Y-%m-%d') }}</time>
+        </div>
+      </div>
   </div>
   {% endfor %}
 </div>

@@ -131,7 +131,7 @@ textarea.input-block-level {
   font-family: 600 24px "Helvetica Neue", "Xin Gothic", "Hiragino Sans GB", "WenQuanYi Micro Hei", "Microsoft YaHei", sans-serif;
 }
 .topic-form textarea {
-  min-height: 350px;
+  min-height: 200px;
   max-width: 100%;
 }
 .preview-area {
