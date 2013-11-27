@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+{% block subtitle %}{{user}}{% endblock %}
+
+{% from "macro/ui.html" import nav, topic_list %}
+
+{% block nav %}
+{{ nav('user') }}
+{% endblock %}
+
+{% block content %}
+<div class="module profile">
+  <div class="account-group inner clearfix">
+    <div class="account-inner pull-left">
+      <strong>{{user}}</strong>
+      <div class="meta muted">
+        <small>#{{user.id}}</small>
+        <span class="sep">@</span>
+        <time>{{user.date_joined.strftime('%Y-%m-%d')}}</time>
+      </div>
+      {% if user.website %}
+      <div><a href="{{user.website}}">{{user.website}}</a></div>
+      {% endif %}
+    </div>
+  </div>
+  {% if user.description %}
+  <div class="inner" style="border-top:1px solid #ddd">
+    {{user.description|renderToGFM|safe}}
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

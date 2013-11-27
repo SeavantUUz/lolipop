@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block subtitle %}用户{% endblock %}
+
+{% from "macro/ui.html" import nav, user_list, pagination %}
+
+{% block nav %}
+{{ nav('user') }}
+{% endblock %}
+
+{% block content %}
+<div class="module">
+  <div class="module-header inner">
+    <strong>用户</strong>
+  </div>
+  <div class="module-body">
+    {{ user_list(paginator.items) }}
+  </div>
+  {% if paginator.pages > 1 %}
+  <div class="module-footer inner">
+    {{ pagination(paginator, url_for('user.users')) }}
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

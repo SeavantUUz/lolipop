@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+
+{% block subtitle %}后台{% endblock %}
+
+{% from "macro/ui.html" import nav, pagination %}
+
+{% block content %}
+<div class="module">
+  <div class="module-header inner">
+    <strong>侧边栏</strong>
+  </div>
+  <form class="form inner" action="" method="post">
+    <textarea name="content" placeholder="sidebar html" class="input-block-level" rows="15">{% if sidebar %}{{ sidebar }}{% endif %}</textarea>
+    <button class="btn-success btn">更新</button>
+  </form>
+</div>
+<div class="module">
+  <div class="module-header inner">
+    <strong>用户</strong>
+  </div>
+  <div class="module-body">
+    <div class="item-list user-list">
+      {% for user in paginator.items %}
+      <div class="item">
+        <div class="account-group">
+         <!--  <img src="{{ user.avatar(48)}}" alt="{{user}}" /> -->
+          <a href="{{url_for('user.view', uid=user.id)}}"><strong>{{user}}</strong></a>
+          <div class="meta">
+            <time>{{ user.date.strftime('%Y-%m-%d') }}</time>
+          </div>
+        </div>
+        {% if g.user.is_admin %}
+        <a class="label label-success" href="{{ url_for('admin.user', uid=user.id) }}">{{_('Edit')}}</a>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% if paginator.pages > 1 %}
+  <div class="module-footer inner">
+    {{ pagination(paginator, url_for('admin.dashboard')) }}
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
