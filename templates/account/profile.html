@@ -12,7 +12,7 @@
   <form class="form-horizontal inner" method="post" action="">
     {{ form.csrf_token }}
       {% if profile.avatar %}
-  <img class="pull-left" src="{{profile.avatar}}" alt="{{user}}" width="86" height="86" />
+  <div style="position:absolute"><img class="pull-left" src="{{profile.avatar}}" alt="{{user}}" width="86" height="86" /></div>
   {% endif %}
     {{ horizontal_disabled_field(form.username,'input-block-level') }}
     {{ horizontal_disabled_field(form.email, 'input-block-level') }}

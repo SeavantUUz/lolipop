@@ -1,5 +1,7 @@
 {% extends "layout.html" %}
 
+{% block subtitle %}主题{% endblock %}
+
 {% from "macro/ui.html" import nav %}
 
 {% block nav %}
@@ -9,6 +11,9 @@
 {% block content %}
 {% from "macro/ui.html" import topic_list,pagination %}
 <div class="module">
+	<div class="module-header inner">
+    	<strong>主题</strong>
+  	</div>
 <div class="module-body">
     {{ topic_list(paginator.items) }}
 </div>

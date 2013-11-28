@@ -28,3 +28,15 @@ class BleepRenderer(HtmlRenderer,SmartyPants):
 class MaxinObject(object):
     pass
 
+def fill_object(items,profiles,*args):
+    profiles_dict = {}
+    for profile in profiles:
+        profiles_dict[profile.id] = profile
+    for arg in args:
+        items = map(lambda o:_add_attr(o,profiles_dict,arg),items)
+    return items
+
+def _add_attr(item,profiles_dict,arg):
+    profile = profiles_dict.get(item.id)
+    item.__setattr__(arg,getattr(profile,arg))
+    return item

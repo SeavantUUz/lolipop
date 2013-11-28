@@ -11,21 +11,33 @@
 {% block content %}
 <div class="module profile">
   <div class="account-group inner clearfix">
+    <img class="pull-left" src="{{profile.avatar}}" alt="{{user}}" width="86" height="86" />
     <div class="account-inner pull-left">
       <strong>{{user}}</strong>
       <div class="meta muted">
         <small>#{{user.id}}</small>
-        <span class="sep">@</span>
+        <span class="sep"></span>
         <time>{{user.date_joined.strftime('%Y-%m-%d')}}</time>
       </div>
-      {% if user.website %}
-      <div><a href="{{user.website}}">{{user.website}}</a></div>
+      {% if profile.website %}
+      <div><a href="{{profile.website}}">{{profile.website}}</a></div>
+      {% endif %}
+      {% if profile.weibo %}
+      <div><a href="http://www.weibo.com/{{profile.weibo}}">微博: @{{profile.weibo}}</a></div>
+      {% endif %}
+      {% if profile.twitter %}
+      <div><a href="https://twitter.com/{{profile.twitter}}">twitter: @{{profile.twitter}}</a></div>
       {% endif %}
     </div>
   </div>
-  {% if user.description %}
+  {% if profile.description %}
   <div class="inner" style="border-top:1px solid #ddd">
-    {{user.description|renderToGFM|safe}}
+    {{profile.description|renderToGFM|safe}}
+  </div>
+  {% endif %}
+    {% if profile.significant %}
+  <div class="inner" style="border-top:1px solid #ddd">
+    {{profile.significant}}
   </div>
   {% endif %}
 </div>

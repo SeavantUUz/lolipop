@@ -61,9 +61,15 @@
   {% for user in items %}
   <div class="item">
       <div class="account-group">
+        <img src="{{ user.avatar}}" alt="{{user}}" />
         <a href="{{url_for('user.view', uid=user.id)}}"><strong>{{user}}</strong></a>
         <div class="meta">
-          <time>{{ user.date_joined.strftime('%Y-%m-%d') }}</time>
+          {% if user.twitter %}
+                  <time>{{ user.date_joined.strftime('%Y-%m-%d') }}</time>
+          <span class="sep">&middot;</span>
+          <a href="https://twitter.com/{{user.twitter}}">{{user.twitter}}</a>
+          {% endif %}
+
         </div>
       </div>
   </div>
