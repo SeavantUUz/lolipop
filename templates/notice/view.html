@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block subtitle %}公告{% endblock %}
+
+{% from "macro/ui.html" import nav %}
+
+{% block nav %}
+{{ nav('home') }}
+{% endblock %}
+
+{% block content %}
+<div class="module">
+    <div class="module-header inner">
+    <strong>{{notice.title}}</strong>
+  </div>
+  <div class="module-body item-list ">
+    <div class="item hentry">
+      <div class="entry-content">{{notice.content|renderToGFM|safe}}</div>
+    </div>
+  </div>
+</div>
+{% endblock %}
