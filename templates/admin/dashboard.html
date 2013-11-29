@@ -35,7 +35,9 @@
     <strong>侧边栏</strong>
   </div>
   <form class="form inner" action="" method="post">
+    {% with sidebar = load_sidebar_notice() %}
     <textarea name="content" placeholder="sidebar html" class="input-block-level" rows="15">{% if sidebar %}{{ sidebar }}{% endif %}</textarea>
+    {% endwith %}
     <button class="btn-success btn">更新</button>
   </form>
   </div>

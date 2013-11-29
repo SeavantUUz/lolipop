@@ -10,13 +10,9 @@
 <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap.css') }}" />
 <link rel="stylesheet" href="{{ url_for('static',filename='css/site.css') }}" />
 
-
-
-<head>
-
 <body>
     <script src="{{ url_for('static',filename='js/jquery-1.9.1.min.js')}}"></script>
-      <script src="{{ url_for('static',filename='js/site.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/site.js') }}"></script>
     <script src="{{ url_for('static',filename='js/bootstrap.js') }}"></script>
 
     {% from "macro/ui.html" import nav%}
@@ -41,13 +37,20 @@
             {% block declaration %}{% endblock %}
             {% block content %}{% endblock %}
           </div>
+           <div class="span4">
+            {% block sidebar %}
+            {% endblock %}
+            {% block sitestatus %}
+            {% include "snippet/sidebar.html" %}
+            {% endblock %}
+          </div>
         </div>
         {% endblock %}
       </div>
     </div>
     {% block footer %}
+        {% include "snippet/footer.html" %}
     {% endblock %}
-
     {% block afterscript %}{% endblock %}
   </body>
 </html>
