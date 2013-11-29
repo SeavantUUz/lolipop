@@ -1,7 +1,7 @@
 # coding: utf-8
 from flask import Blueprint,render_template,redirect,url_for,flash
-from kutoto.models import Notice
-from kutoto.form import NoticeForm
+from lolipop.models import Notice
+from lolipop.form import NoticeForm
 from views.account import admin_required
 
 bp = Blueprint('notice',__name__)

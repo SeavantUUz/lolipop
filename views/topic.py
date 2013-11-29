@@ -2,9 +2,9 @@
 from flask import Blueprint,render_template,redirect,abort,url_for,request
 from flask.ext.login import current_user,login_required
 from jinja2 import TemplateNotFound
-from kutoto.models import Post,Topic,User,Node
+from lolipop.models import Post,Topic,User,Node
+from lolipop.form import ReplyForm,CreateForm
 from config import force_int
-from kutoto.form import ReplyForm,CreateForm
 from views.account import admin_required
 
 bp = Blueprint('topic',__name__)

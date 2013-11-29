@@ -4,7 +4,7 @@ from flask.ext.login import current_user,login_user,login_required,logout_user
 from config import db,login_manager
 from app import create_app,register_jinja
 #from kutoto.form import ,EditPost,AddNodeForm
-from kutoto.models import Post,Topic,User,Node,Notice
+from lolipop.models import Post,Topic,User,Node,Notice
 from flask import redirect,render_template,url_for,request,flash,abort,current_app
 from functools import wraps
 

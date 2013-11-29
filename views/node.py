@@ -1,7 +1,7 @@
 from flask import redirect,render_template,url_for,flash,abort,request,Blueprint
 from config import force_int
-from kutoto.form import NodeForm,CreateForm
-from kutoto.models import Node,Topic
+from lolipop.form import NodeForm,CreateForm
+from lolipop.models import Node,Topic
 from flask.ext.login import current_user
 from views.account import admin_required
 

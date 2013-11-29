@@ -2,8 +2,8 @@
 from flask import Blueprint,request,render_template,flash,current_app,redirect,url_for
 from views.account import admin_required
 from config import force_int,fill_object
-from kutoto.models import User,Profile
-from kutoto.form import NodeForm
+from lolipop.models import User,Profile
+from lolipop.form import NodeForm
 import codecs,os
 
 bp = Blueprint('admin',__name__)

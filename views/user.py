@@ -1,7 +1,7 @@
 from flask import redirect,render_template,url_for,abort,request,Blueprint
 from flask.ext.login import current_user
 from config import force_int,fill_object
-from kutoto.models import User,Topic,Profile
+from lolipop.models import User,Topic,Profile
 
 
 bp = Blueprint("user",__name__)

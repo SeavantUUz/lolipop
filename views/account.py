@@ -3,8 +3,8 @@ from functools import wraps
 from flask import abort,Blueprint,render_template,redirect,request,url_for,flash
 from config import login_manager,MaxinObject
 from flask.ext.login import current_user,login_user,login_required,logout_user
-from kutoto.models import User,Profile
-from kutoto.form import RegisterForm,LoginForm,ProfileForm
+from lolipop.models import User,Profile
+from lolipop.form import RegisterForm,LoginForm,ProfileForm
 
 bp = Blueprint('account',__name__)
 
