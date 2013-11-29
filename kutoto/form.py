@@ -2,7 +2,7 @@
 from flask_wtf import Form
 from wtforms import TextField,TextAreaField,PasswordField,BooleanField
 from wtforms.validators import DataRequired,Required,EqualTo
-from kutoto.models import Post,Topic,User,Node,Profile
+from kutoto.models import Post,Topic,User,Node,Profile,Notice
 from datetime import datetime
 
 class CreateForm(Form):
@@ -13,6 +13,14 @@ class CreateForm(Form):
         topic = Topic(title = self.subject.data)
         post = Post(content = self.content.data)
         return topic.save(node=node,user = user,post = post)
+
+class NoticeForm(Form):
+    subject = TextField(u'标题',validators=[DataRequired(message=u'标题')],description=u'这里填写标题哦')
+    content = TextAreaField(u'内容',validators=[DataRequired(u'内容')],description=u'这里填写内容的说')
+
+    def save(self):
+        notice = Notice(title = self.subject.data,content = self.content.data)
+        return notice.save()
 
 class ReplyForm(Form):
     content = TextAreaField(u'内容',validators=[DataRequired(u'内容')])

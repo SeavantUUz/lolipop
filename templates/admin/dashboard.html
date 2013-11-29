@@ -2,9 +2,34 @@
 
 {% block subtitle %}后台{% endblock %}
 
+{% from "macro/form.html" import horizontal_field, horizontal_form_button %}
 {% from "macro/ui.html" import nav, pagination %}
 
 {% block content %}
+<div class="module">
+  <div class="module-header inner">
+    <strong>新增公告</strong>
+  </div>
+  <form class="form inner" method="post" action="{{url_for('notice.create')}}">
+    {{ form.csrf_token }}
+    <textarea name="subject" placeholder="公告标题" class="input-block-level" rows="1"></textarea>
+    <textarea name="content" placeholder="公告内容" class="input-block-level" rows="5"></textarea>
+    <button class="btn-success btn">新增公告</button>
+  </form>
+</div>
+
+<div class="module">
+  <div class="module-header inner">
+    <strong>新增节点</strong>
+  </div>
+  <form class="form inner" method="post" action="{{url_for('node.create')}}">
+    {{ form.csrf_token }}
+    <textarea name="title" placeholder="节点名称" class="input-block-level" rows="1"></textarea>
+    <textarea name="description" placeholder="节点描述" class="input-block-level" rows="5"></textarea>
+    <button class="btn-success btn">新增节点</button>
+  </form>
+</div>
+
 <div class="module">
   <div class="module-header inner">
     <strong>侧边栏</strong>
@@ -13,7 +38,9 @@
     <textarea name="content" placeholder="sidebar html" class="input-block-level" rows="15">{% if sidebar %}{{ sidebar }}{% endif %}</textarea>
     <button class="btn-success btn">更新</button>
   </form>
-</div>
+  </div>
+
+
 <div class="module">
   <div class="module-header inner">
     <strong>用户</strong>
@@ -23,15 +50,12 @@
       {% for user in paginator.items %}
       <div class="item">
         <div class="account-group">
-         <!--  <img src="{{ user.avatar(48)}}" alt="{{user}}" /> -->
+        <img src="{{ user.avatar}}" alt="{{user}}" />
           <a href="{{url_for('user.view', uid=user.id)}}"><strong>{{user}}</strong></a>
           <div class="meta">
-            <time>{{ user.date.strftime('%Y-%m-%d') }}</time>
+            <time>{{ user.date_joined.strftime('%Y-%m-%d') }}</time>
           </div>
         </div>
-        {% if g.user.is_admin %}
-        <a class="label label-success" href="{{ url_for('admin.user', uid=user.id) }}">{{_('Edit')}}</a>
-        {% endif %}
       </div>
       {% endfor %}
     </div>

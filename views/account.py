@@ -8,6 +8,12 @@ from kutoto.form import RegisterForm,LoginForm,ProfileForm
 
 bp = Blueprint('account',__name__)
 
+def permission_limit(func):
+    @wraps(func)
+    def decorated_view(*args,**kwargs):
+        abort(404)
+    return decorated_view
+
 def admin_required(func):
     @wraps(func)
     def decorated_view(*args,**kwargs):
@@ -24,12 +30,14 @@ def load_user(userid):
     return User.query.get_or_404(userid)
 
 @bp.route('/signup',methods=["GET","POST"])
+@permission_limit
 def signup():
     if current_user is not None and current_user.is_authenticated():
         return redirect(url_for('.profile',uid = current_user.id))
     form = RegisterForm()
     if form.validate_on_submit():
         user = form.save()
+        Profile.get_or_create(user.id)
         login_user(user)
         flash(("Thanks for your registering"),"success")
         return redirect(url_for('index'))

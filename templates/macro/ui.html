@@ -45,6 +45,16 @@
 {% endif %}
 {% endmacro %}
 
+{% macro notice_list(items) %}
+<div class="item-list">
+  {% for item in items %}
+  <div class="item hentry">
+    <h3 class="title"><a href="{{url_for('notice.view', uid=item.id)}}">{{item.title}}</a></h3>
+  </div>
+  {% endfor %}
+</div>
+{% endmacro %}
+
 {% macro node_list(items,show_button=True) %}
 <div class="node-list item-list">
   {% for item in items %}
@@ -61,7 +71,7 @@
   {% for user in items %}
   <div class="item">
       <div class="account-group">
-        <img src="{{ user.avatar}}" alt="{{user}}" />
+        <img src="{{ user.avatar}}" alt="萌" />
         <a href="{{url_for('user.view', uid=user.id)}}"><strong>{{user}}</strong></a>
         <div class="meta">
           {% if user.twitter %}

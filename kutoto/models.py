@@ -196,6 +196,27 @@ class Post(db.Model):
             db.session.commit()
             return True
 
+class Notice(db.Model):
+    __tablename__ = 'notice'
+    id = db.Column(db.Integer,primary_key = True)
+    title = db.Column(db.String)
+    content = db.Column(db.Text)
+    date_create = db.Column(db.DateTime,default = datetime.utcnow)
+    viewed = db.Column(db.Integer,default=0)
+
+    def __str__(self):
+        return self.title
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+        return self
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+        return self
+
 class Topic(db.Model):
     __tablename__ = 'topics'
     id = db.Column(db.Integer,primary_key = True)

@@ -1,7 +1,16 @@
 {% extends "layout.html" %}
 
-{% from "macro/ui.html" import topic_list %}
+{% from "macro/ui.html" import topic_list,notice_list %}
 {% block content %}
+
+<div class="module">
+  <div class="module-header inner">
+    <strong>公告</strong>
+  </div>
+  <div class="module-body">
+    {{ notice_list(notices) }}
+  </div>
+</div>
 
 <div class="module">
   <div class="module-header inner">
