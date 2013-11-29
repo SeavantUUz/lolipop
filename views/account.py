@@ -40,7 +40,7 @@ def signup():
         Profile.get_or_create(user.id)
         login_user(user)
         flash(("Thanks for your registering"),"success")
-        return redirect(url_for('index'))
+        return redirect(url_for('index.index'))
     return render_template('account/signup.html',form=form)
 
 @bp.route('/signin',methods=["GET","POST"])
@@ -52,7 +52,7 @@ def signin():
         user,authenticated=User.authenticate(form.account.data,form.password.data)
         if user and authenticated:
             login_user(user,remember = form.remember_me.data)
-            return redirect(request.args.get("next") or url_for('index'))
+            return redirect(request.args.get("next") or url_for('index.index'))
     return render_template("account/signin.html",form=form)
 
 @bp.route('/logout')
@@ -60,7 +60,7 @@ def signin():
 def logout():
     logout_user()
     flash(("Logged out"),"success")
-    return redirect(url_for('index'))
+    return redirect(url_for('index.index'))
 
 @bp.route('/profile/uid=<int:uid>',methods=['GET','POST'])
 @login_required
