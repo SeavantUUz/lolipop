@@ -4,10 +4,16 @@ from flask.ext.login import current_user,login_required
 from jinja2 import TemplateNotFound
 from lolipop.models import Post,Topic,User,Node
 from lolipop.form import ReplyForm,CreateForm
-from config import force_int
+from config import force_int,fill_with_user,fill_with_node
 from views.account import admin_required
 
 bp = Blueprint('topic',__name__)
+
+#def fill_with_user(items):
+#    uids = [1]
+#    users = User.query.filter(User.id.in_([1])).all()
+#    for i in users:
+#        print i.username
 
 @bp.route('/')
 def topics():
@@ -16,6 +22,7 @@ def topics():
     if not page:
         return abort(404)
     paginator = Topic.query.order_by(Topic.date_created.desc()).paginate(page,15)
+    paginator.items=fill_with_node(fill_with_user(paginator.items))
     return render_template('topic/topics.html',paginator=paginator,endpoint='topic.topics')
 
 @bp.route('/latest')

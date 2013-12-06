@@ -1,3 +1,4 @@
+# coding:utf-8
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager
 from pygments import highlight
@@ -28,15 +29,34 @@ class BleepRenderer(HtmlRenderer,SmartyPants):
 class MaxinObject(object):
     pass
 
-def fill_object(items,profiles,*args):
-    profiles_dict = {}
-    for profile in profiles:
-        profiles_dict[profile.id] = profile
-    for arg in args:
-        items = map(lambda o:_add_attr(o,profiles_dict,arg),items)
+from lolipop.models import User,Profile,Node
+def fill_with_user(items):
+    uids = set([item.user_id for item in items])
+    users = User.query.filter(User.id.in_(uids)).all()
+    profiles = Profile.query.filter(Profile.id.in_(uids)).all()
+    items = fill_object(items,users,'username',attr='user_id')
+    items = fill_object(items,profiles,'avatar',attr='user_id')
     return items
 
-def _add_attr(item,profiles_dict,arg):
-    profile = profiles_dict.get(item.id)
-    item.__setattr__(arg,getattr(profile,arg))
+def fill_with_node(items):
+    uids = set([item.node_id for item in items])
+    nodes = Node.query.filter(Node.id.in_(uids)).all()
+    return fill_object(items,nodes,'title',attr='node_id')
+
+## you could pass a attr='xxx' in kwargs
+## which to indicate which attr be seached
+## in item
+def fill_object(items,objects,*args,**kwargs):
+    objects_dict = {}
+    attr = kwargs.get('attr','id')
+    for o in objects:
+       objects_dict[o.id] = o
+    for arg in args:
+        items = map(lambda o:_add_attr(o,objects_dict,arg,attr),items)
+    return items
+
+def _add_attr(item,objects_dict,arg,attr):
+    _object = objects_dict.get(getattr(item,attr))
+    item.__setattr__(arg,getattr(_object,arg))
     return item
+

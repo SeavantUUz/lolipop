@@ -78,6 +78,9 @@ class User(db.Model,UserMixin):
     def __repr__(self):
         return "%s" % self.username
 
+    def __str__(self):
+        return "%s" % self.username
+
     def check_password(self,password):
         if self.password is None:
             return False

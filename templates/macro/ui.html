@@ -32,6 +32,14 @@
   {% for item in items %}
   <div class="item hentry">
     <h3 class="title"><a href="{{url_for('topic.view', uid=item.id)}}">{{item.title}}</a></h3>
+    <div class="meta">
+       <a href="{{url_for('user.view', uid=item.user_id)}}">{{item.username}}</a>
+      <span class="sep">&middot;</span>
+      <a href="{{url_for('node.view', urlname=item.title)}}">{{item.title}}</a>
+      <span class="sep">&middot;</span>
+      <time datetime="{{item.date_created|xmldatetime}}" pubdate>{{item.date_created|timesince}}</time>
+    </div>
+    <a class="avatar" href="{{url_for('user.view', uid=item.user_id)}}" title="{{item.username}}"><img src="{{item.avatar}}" width="43" height="43" /></a>
   </div>
   {% endfor %}
 </div>

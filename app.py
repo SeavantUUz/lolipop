@@ -1,7 +1,9 @@
+# coding:utf-8
 from flask import Flask
 from config import db,BleepRenderer,login_manager
 import os,codecs
 import misaka as m
+import datetime
 
 def create_app():
     app = Flask(__name__)
@@ -27,6 +29,28 @@ def register_jinja(app):
         md = m.Markdown(renderer,
                 extensions=m.EXT_FENCED_CODE | m.EXT_NO_INTRA_EMPHASIS)
         return md.render(data)
+
+    @app.template_filter('xmldatetime')
+    def xmldatetime(value):
+        if not isinstance(value, datetime.datetime):
+            return value
+        return value.strftime('%Y-%m-%dT%H:%M:%SZ')
+
+    @app.template_filter('timesince')
+    def timesince(value):
+        now = datetime.datetime.utcnow()
+        delta = now - value
+        if delta.days > 365:
+            return u'{num}年前'.format(num=delta.days / 365)
+        if delta.days > 30:
+            return u'{num}个月前'.format(num=delta.days / 30)
+        if delta.days > 0:
+            return u'{num}天前'.format(num=delta.days)
+        if delta.seconds > 3600:
+            return u'{num}小时前'.format(num=delta.seconds / 3600)
+        if delta.seconds > 60:
+            return u'{num}个月前'.format(num=delta.seconds / 60)
+        return u'刚刚'
 
     @app.context_processor
     def register_context():
