@@ -34,29 +34,37 @@ def fill_with_user(items):
     uids = set([item.user_id for item in items])
     users = User.query.filter(User.id.in_(uids)).all()
     profiles = Profile.query.filter(Profile.id.in_(uids)).all()
-    items = fill_object(items,users,'username',attr='user_id')
-    items = fill_object(items,profiles,'avatar',attr='user_id')
+    items = fill_object(items,users,'username',name='user_id')
+    items = fill_object(items,profiles,'avatar',name='user_id')
     return items
 
 def fill_with_node(items):
     uids = set([item.node_id for item in items])
     nodes = Node.query.filter(Node.id.in_(uids)).all()
-    return fill_object(items,nodes,'title',attr='node_id')
+    return fill_object(items,nodes,'title',name='node_id',rename='node_title')
 
 ## you could pass a attr='xxx' in kwargs
 ## which to indicate which attr be seached
 ## in item
 def fill_object(items,objects,*args,**kwargs):
     objects_dict = {}
-    attr = kwargs.get('attr','id')
     for o in objects:
        objects_dict[o.id] = o
     for arg in args:
-        items = map(lambda o:_add_attr(o,objects_dict,arg,attr),items)
+        items = map(lambda o:_add_attr(o,objects_dict,arg,kwargs),items)
     return items
 
-def _add_attr(item,objects_dict,arg,attr):
-    _object = objects_dict.get(getattr(item,attr))
-    item.__setattr__(arg,getattr(_object,arg))
+# to solve rename,I import a ugly method.
+def _add_attr(item,objects_dict,arg,kwargs):
+    # use the attr of item's name to get special object
+    name = kwargs.get('name','id')
+    # attributeName is the name from the special object
+    attributeName = arg
+    _object = objects_dict.get(getattr(item,name))
+    # if the unique key has emerged in item.__dict__
+    # modify the unique key to an other string
+    if arg in item.__dict__.keys():
+        arg = kwargs['rename']
+    item.__setattr__(arg,getattr(_object,attributeName))
     return item
 
