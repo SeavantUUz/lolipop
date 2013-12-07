@@ -33,9 +33,10 @@
   <div class="item hentry">
     <h3 class="title"><a href="{{url_for('topic.view', uid=item.id)}}">{{item.title}}</a></h3>
     <div class="meta">
-       <a href="{{url_for('user.view', uid=item.user_id)}}">{{item.username}}</a>
+        <a href="{{url_for('node.view', urlname=item.node_titile)}}"><strong>{{item.node_title}}</strong></a>
+
       <span class="sep">&middot;</span>
-      <a href="{{url_for('node.view', urlname=item.node_titile)}}">{{item.node_title}}</a>
+       <a href="{{url_for('user.view', uid=item.user_id)}}">{{item.username}}</a>
       <span class="sep">&middot;</span>
       <time datetime="{{item.date_created|xmldatetime}}" pubdate>{{item.date_created|timesince}}</time>
     </div>

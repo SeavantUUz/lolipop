@@ -16,6 +16,12 @@
     {% for item in paginator.items %}
     <div class="item hentry">
       <div class="entry-content">{{item.content|renderToGFM|safe}}</div>
+      <div class="meta">
+       <a href="{{url_for('user.view', uid=item.user_id)}}">{{item.username}}</a>
+      <span class="sep">&middot;</span>
+      <time datetime="{{item.date_created|xmldatetime}}" pubdate>{{item.date_created|timesince}}</time>
+      </div>
+          <a class="avatar" href="{{url_for('user.view', uid=item.user_id)}}" title="{{item.username}}"><img src="{{item.avatar}}" width="43" height="43" /></a>
     </div>
     {% endfor %}
     {% else %}

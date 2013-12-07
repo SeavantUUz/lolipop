@@ -32,6 +32,7 @@ def latest():
     if not page:
         return abort(404)
     paginator = Topic.query.order_by(Topic.id.desc()).paginate(page,15)
+    paginator.items=fill_with_node(fill_with_user(paginator.items))
     return render_template('topic/topics.html',paginator=paginator,endpoint='topic.latest')
 
 @bp.route('/<int:uid>',methods=('GET','POST'))
@@ -40,6 +41,7 @@ def view(uid):
     if not page:
         return abort(404)
     paginator = Post.query.filter_by(topic_id=uid).paginate(page,15)
+    paginator.items = fill_with_user(paginator.items)
     topic = Topic.query.get_or_404(uid)
     form = None
     if current_user is not None and current_user.is_authenticated():
