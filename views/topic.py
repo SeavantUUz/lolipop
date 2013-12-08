@@ -4,7 +4,7 @@ from flask.ext.login import current_user,login_required
 from jinja2 import TemplateNotFound
 from lolipop.models import Post,Topic,User,Node
 from lolipop.form import ReplyForm,CreateForm
-from config import force_int,fill_with_user,fill_with_node
+from config import force_int,fill_with_user,fill_with_node,cache
 from views.account import admin_required
 
 bp = Blueprint('topic',__name__)
@@ -16,6 +16,7 @@ bp = Blueprint('topic',__name__)
 #        print i.username
 
 @bp.route('/')
+@cache.cached(timeout=50)
 def topics():
     '''To list all topics'''
     page = force_int(request.args.get('page',1),0)
@@ -26,6 +27,7 @@ def topics():
     return render_template('topic/topics.html',paginator=paginator,endpoint='topic.topics')
 
 @bp.route('/latest')
+@cache.cached(timeout=50)
 def latest():
     '''list all topics by latest time'''
     page = force_int(request.args.get('page',1),0) 
@@ -36,6 +38,7 @@ def latest():
     return render_template('topic/topics.html',paginator=paginator,endpoint='topic.latest')
 
 @bp.route('/<int:uid>',methods=('GET','POST'))
+@cache.cached(timeout=50)
 def view(uid):
     page = force_int(request.args.get('page',1),0)
     if not page:

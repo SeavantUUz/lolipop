@@ -3,6 +3,7 @@ from flask import Blueprint,render_template,redirect,url_for,flash
 from lolipop.models import Notice
 from lolipop.form import NoticeForm
 from views.account import admin_required
+from config import cache
 
 bp = Blueprint('notice',__name__)
 
@@ -24,6 +25,7 @@ def delete(uid):
     return redirect(url_for('admin.dashboard'))
 
 @bp.route('/<int:uid>')
+@cache.cached(timeout=86400)
 def view(uid):
     notice = Notice.query.get_or_404(uid)
     return render_template('notice/view.html',notice=notice)

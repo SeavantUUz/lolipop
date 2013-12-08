@@ -1,6 +1,6 @@
 # coding:utf-8
 from flask import Flask
-from config import db,BleepRenderer,login_manager
+from config import db,cache,BleepRenderer,login_manager
 import os,codecs
 import misaka as m
 import datetime
@@ -18,6 +18,7 @@ def create_app():
     login_manager.init_app(app)
     if not os.path.exists('announcement'):
         os.mknod('announcement')
+    cache.init_app(app,config={'CACHE_TYPE': 'simple'})
     return app
 
 def register_jinja(app):

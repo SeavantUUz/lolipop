@@ -1,12 +1,13 @@
 from flask import redirect,render_template,url_for,abort,request,Blueprint
 from flask.ext.login import current_user
-from config import force_int,fill_object
+from config import force_int,fill_object,cache
 from lolipop.models import User,Topic,Profile
 
 
 bp = Blueprint("user",__name__)
 
 @bp.route('/')
+@cache.cached(timeout=200)
 def users():
     page = force_int(request.args.get('page',1),0)
     if not page:

@@ -1,6 +1,7 @@
 # coding:utf-8
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager
+from flask.ext.cache import Cache
 from pygments import highlight
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters import HtmlFormatter
@@ -8,6 +9,7 @@ from misaka import HtmlRenderer,SmartyPants
 import misaka as m
 
 db = SQLAlchemy()
+cache = Cache()
 login_manager = LoginManager()
 
 def force_int(value,default=1):

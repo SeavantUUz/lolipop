@@ -1,11 +1,12 @@
 from flask import Blueprint,render_template
 from lolipop.models import Notice,Topic
-from config import fill_with_user,fill_with_node
+from config import fill_with_user,fill_with_node,cache
 
 bp = Blueprint('index',__name__)
 
 @bp.route("/")
 @bp.route("/index")
+@cache.cached(timeout=300)
 def index():
     notices = Notice.query.order_by(Notice.id.desc())
     topics = Topic.query.order_by(Topic.last_post_id.desc()).limit(15)
