@@ -1,5 +1,6 @@
 from flask.ext.script import Manager,Server
-from config import db
+from flask.ext.login import login_required,current_user 
+from config import db,mark_online
 from app import create_app
 import os
 

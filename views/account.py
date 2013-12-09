@@ -1,6 +1,6 @@
 # coding:utf-8
 from functools import wraps
-from flask import abort,Blueprint,render_template,redirect,request,url_for,flash
+from flask import abort,Blueprint,render_template,redirect,request,url_for,flash,current_app
 from config import login_manager,MaxinObject
 from flask.ext.login import current_user,login_user,login_required,logout_user
 from lolipop.models import User,Profile
@@ -30,7 +30,6 @@ def load_user(userid):
     return User.query.get_or_404(userid)
 
 @bp.route('/signup',methods=["GET","POST"])
-@permission_limit
 def signup():
     if current_user is not None and current_user.is_authenticated():
         return redirect(url_for('.profile',uid = current_user.id))
@@ -51,6 +50,7 @@ def signin():
     if form.validate_on_submit():
         user,authenticated=User.authenticate(form.account.data,form.password.data)
         if user and authenticated:
+            
             login_user(user,remember = form.remember_me.data)
             return redirect(request.args.get("next") or url_for('index.index'))
     return render_template("account/signin.html",form=form)
@@ -58,6 +58,10 @@ def signin():
 @bp.route('/logout')
 @login_required
 def logout():
+    try:
+        current_app.config['ONLINEUSERS'].remove(current_user.id)
+    except KeyError:
+        pass
     logout_user()
     flash(("Logged out"),"success")
     return redirect(url_for('index.index'))
