@@ -8,7 +8,7 @@
         {% if nodes %}
 
         {% for item in nodes %}
-        <li><a href="{{url_for('node.view', urlname=item.title)}}">{{item.title}}</a><li>
+        <li><a href="{{url_for('node.view', urlname=item.title)}}">{{item.title}}</a></li>
         {% endfor %}
 
         {% endif %}
