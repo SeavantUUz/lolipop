@@ -91,3 +91,4 @@ def get_online_users():
     current = int(time.time()) // 60
     minutes = xrange(ONLINE_LAST_MINUTES)
     return redis.sunion(['online-users/%d' % (current-x) for x in minutes])
+

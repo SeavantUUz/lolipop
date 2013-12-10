@@ -1,4 +1,23 @@
 <div class="module">
+    <div class="module-header inner">
+    <strong>关注节点</strong>
+  </div>
+  <div class="module-body inner">
+            <ul>
+        {% with nodes = getNodes() %}  
+        {% if nodes %}
+
+        {% for item in nodes %}
+        <li><a href="{{url_for('node.view', urlname=item.title)}}">{{item.title}}</a><li>
+        {% endfor %}
+
+        {% endif %}
+        {% endwith %}
+                </ul>
+  </div>
+</div>
+
+<div class="module">
   <div class="module-header inner">
     <strong>小伙伴们</strong>
   </div>

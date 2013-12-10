@@ -62,20 +62,23 @@ def register_jinja(app):
             return u'{num}个月前'.format(num=delta.seconds / 60)
         return u'刚刚'
 
+    from views.focus import getNodes
     @app.context_processor
     def register_context():
         return dict(
                 load_sidebar_notice=load_sidebar_notice,
+                getNodes = getNodes,
                 )
 
 def register_routes(app):
-    from views import index,topic,account,node,admin,user,notice
+    from views import index,topic,account,node,admin,user,notice,focus
     app.register_blueprint(topic.bp,url_prefix='/topic')
     app.register_blueprint(account.bp,url_prefix='/account')
     app.register_blueprint(node.bp,url_prefix='/node')
     app.register_blueprint(admin.bp,url_prefix='/admin')
     app.register_blueprint(user.bp,url_prefix='/user')
     app.register_blueprint(notice.bp,url_prefix='/notice')
+    app.register_blueprint(focus.bp,url_prefix='/focus')
     app.register_blueprint(index.bp,url_profix='')
 
 

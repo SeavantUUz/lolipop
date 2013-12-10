@@ -69,7 +69,7 @@
   {% for item in items %}
   <div class="item hentry">
     <h3 class="title"><a href="{{url_for('node.view', urlname=item.title)}}">{{item.title}}</a></h3>
-    <a class="btn btn-success btn-mini" href="{{url_for('topic.create', urlname=item.title)}}">新的话题</a>
+    <a class="btn btn-success btn-mini" href="{{url_for('focus.add', node_id=item.id)}}">关注</a>
   </div>
   {% endfor %}
 </div>

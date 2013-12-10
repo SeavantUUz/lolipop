@@ -8,7 +8,6 @@ from views.account import admin_required
 bp = Blueprint("node",__name__)
 
 @bp.route('/')
-@cache.cached(timeout=400)
 def nodes():
     nodes = Node.query.order_by(Node.id.desc()).all()
     return render_template('node/nodes.html',nodes = nodes)
