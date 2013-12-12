@@ -3,7 +3,7 @@ from flask import Blueprint,render_template,redirect,url_for,flash
 from lolipop.models import Notice
 from lolipop.form import NoticeForm
 from views.account import admin_required
-from config import cache
+from _helpers import cache
 
 bp = Blueprint('notice',__name__)
 

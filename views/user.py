@@ -1,6 +1,6 @@
 from flask import redirect,render_template,url_for,abort,request,Blueprint,current_app
 from flask.ext.login import current_user
-from config import force_int,fill_object,cache,get_online_users
+from _helpers import force_int,fill_object,cache,get_online_users
 from lolipop.models import User,Topic,Profile
 
 

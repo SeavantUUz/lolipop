@@ -1,5 +1,5 @@
 from flask import redirect,render_template,url_for,flash,abort,request,Blueprint
-from config import force_int,cache,fill_with_user,fill_with_node
+from _helpers import force_int,cache,fill_with_user,fill_with_node
 from lolipop.form import NodeForm,CreateForm
 from lolipop.models import Node,Topic
 from flask.ext.login import current_user
@@ -32,6 +32,7 @@ def create():
     form = NodeForm()
     if form.validate_on_submit():
         node = form.save()
+        cache.clear()
         return redirect(url_for('.view',urlname=node.title))
     return render_template('node/create.html',form=form,current_user = current_user)
 
@@ -43,5 +44,6 @@ def edit(urlname):
     if form.validate_on_submit():
         form.populate_obj(node)
         node.save()
+        cache.clear()
         return redirect(url_for('.view',urlname=node.title))
     return render_template('node/edit.html',form=form,node=node,current_user=current_user)

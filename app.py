@@ -1,8 +1,8 @@
 # coding:utf-8
 from flask import Flask
-from config import db,cache,BleepRenderer,login_manager
+from _helpers import db,cache,BleepRenderer,login_manager,mark_online
 from flask.ext.login import login_required,current_user 
-from config import db,mark_online
+#from _helpers import db,mark_online#,mail
 import os,codecs
 import misaka as m
 import datetime
@@ -19,6 +19,8 @@ def create_app():
     register_routes(app)
     db.init_app(app)
     login_manager.init_app(app)
+    #mail.init_app(app)
+
     if not os.path.exists('announcement'):
         os.mknod('announcement')
     cache.init_app(app,config={'CACHE_TYPE': 'simple'})

@@ -20,6 +20,8 @@
        <a href="{{url_for('user.view', uid=item.user_id)}}">{{item.username}}</a>
       <span class="sep">&middot;</span>
       <time datetime="{{item.date_created|xmldatetime}}" pubdate>{{item.date_created|timesince}}</time>
+        <!-- <span class="sep">&middot;</span> -->
+      <!-- <a  href="{{ url_for('topic.reply',uid=item.topic_id)}}?pid={{item.id}}"><strong>回复</strong></a> -->
                 </div>
           <a class="avatar" href="{{url_for('user.view', uid=item.user_id)}}" title="{{item.username}}"><img src="{{item.avatar}}" width="30" height="30" /></a>
 

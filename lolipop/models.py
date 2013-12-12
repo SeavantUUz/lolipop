@@ -3,7 +3,7 @@
 from datetime import datetime
 #from run import db
 from werkzeug import generate_password_hash,check_password_hash
-from config import db
+from _helpers import db
 from flask.ext.login import UserMixin
 
 class Node(db.Model):

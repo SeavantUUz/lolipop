@@ -1,7 +1,7 @@
 # coding:utf-8
 from flask import Blueprint,request,render_template,flash,current_app,redirect,url_for
 from views.account import admin_required
-from config import force_int,fill_object
+from _helpers import force_int,fill_object
 from lolipop.models import User,Profile
 from lolipop.form import NodeForm
 import codecs,os

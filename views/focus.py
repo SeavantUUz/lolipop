@@ -1,7 +1,7 @@
 from flask import Blueprint,redirect,url_for,abort
 from flask.ext.login import current_user
 from lolipop.models import Node
-from config import redis
+from _helpers import redis,cache
 
 bp = Blueprint("focus",__name__)
 
@@ -24,6 +24,7 @@ def add(node_id):
         p = redis.pipeline()
         p.sadd(user_key,node_id)
         p.execute()
+    cache.clear()
     return redirect(url_for('node.nodes'))
 
 @bp.route('/remove/<int:node_id>')
@@ -33,5 +34,6 @@ def remove(node_id):
         p = redis.pipeline()
         p.srem(user_key,node_id)
         p.execute()
+    cache.clear()
     return redirect(url_for('node.nodes'))
 

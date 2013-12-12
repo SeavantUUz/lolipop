@@ -1,7 +1,7 @@
 # coding:utf-8
 from functools import wraps
 from flask import abort,Blueprint,render_template,redirect,request,url_for,flash,current_app
-from config import login_manager,MaxinObject
+from _helpers import login_manager,MaxinObject,cache
 from flask.ext.login import current_user,login_user,login_required,logout_user
 from lolipop.models import User,Profile
 from lolipop.form import RegisterForm,LoginForm,ProfileForm
@@ -33,11 +33,30 @@ def load_user(userid):
 def signup():
     if current_user is not None and current_user.is_authenticated():
         return redirect(url_for('.profile',uid = current_user.id))
+    #next_url = request.args.get('next',url_for('.profile'))
+    #token = request.args.get('token')
+    #if token:
+    #    user = verify_auth_token(token,1)
+    #    if not user:
+    #        flash(u'无效用户','error')
+    #        return redirect(next_url)
+    #    user.save()
+    #    login_user(user)
+    #    return redirect(next_url)
+
     form = RegisterForm()
     if form.validate_on_submit():
         user = form.save()
+        #profile = Profile(user.id)
+        #wait_verify = redis.set(user.username,True)
+        #if not wait_verify:
+        #    user.save()
+        #    Profile.get_or_create(user.id)
+        #    login_user(user)
+        #    return redirect(next_url)
         Profile.get_or_create(user.id)
         login_user(user)
+        cache.clear()
         flash(("Thanks for your registering"),"success")
         return redirect(url_for('index.index'))
     return render_template('account/signup.html',form=form)
@@ -52,6 +71,7 @@ def signin():
         if user and authenticated:
             
             login_user(user,remember = form.remember_me.data)
+            cache.clear()
             return redirect(request.args.get("next") or url_for('index.index'))
     return render_template("account/signin.html",form=form)
 
